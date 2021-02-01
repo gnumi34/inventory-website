@@ -3,6 +3,12 @@ from django.contrib.auth.models import User
 
 
 class Inverter(models.Model):
+    APPLICATIONS = [
+        ('On-Grid', 'On-Grid'),
+        ('Off-Grid', 'Off-Grid'),
+        ('Hybrid', 'Hybrid')
+    ]
+
     PHASE_CHOISES = [
         ('Single Phase', "Single Phase"),
         ('Triple Phase', "Triple Phase"),
@@ -16,7 +22,7 @@ class Inverter(models.Model):
     merk = models.CharField(max_length=30, unique=False)
     tipe = models.CharField(max_length=50, unique=False)
     jenis = models.CharField(max_length=50, unique=False)
-    aplikasi = models.CharField(max_length=50, unique=False)
+    aplikasi = models.CharField(max_length=50, unique=False, choices=APPLICATIONS)
     phase = models.CharField(max_length=15, choices=PHASE_CHOISES)
     kva = models.FloatField(help_text="Please enter the number in kVA")
     kurs = models.CharField(max_length=5, choices=KURS_UANG)
