@@ -39,7 +39,7 @@ Planned features:
 
 5. Run migrations to create DB file:
 
-    `python3 manage.py makemigrations`
+    `python3 manage.py makemigrations data_entry`
 
     `python3 manage.py migrate`
 
