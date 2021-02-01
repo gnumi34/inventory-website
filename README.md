@@ -14,7 +14,6 @@ Planned features:
 
 
 ## Requirements:
----
 1. Windows 8/8.1 above (Windows 7 or older can only use Django version 2), Linux, or Mac OS X
 2. Python with minimum version of 3.8.6
 3. Virtualenv module
@@ -22,7 +21,6 @@ Planned features:
 5. Your chosen IDE configured for developing Django Apps
 
 ## Local Deployment Steps
----
 1. Install Python (if not yet installed) and pip (Python Package Manager). Then install virtualenv using:
    
    `pip install virtualenv`.
