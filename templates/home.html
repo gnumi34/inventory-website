@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">Home</li>
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="welcome">
+            Welcome to TMLEnergy Inventory Website!<br>
+            What do you want to do?<br><br>
+            <a href="{% url 'input' %}" class="btn btn-primary">Input Inventory Data</a>
+            <a href="{% url 'review' %}" class="btn btn-primary">Review Inventory Data</a>
+        </div>
+    {% else %}
+        <div class="welcome">
+            You are not authorized to enter the website.
+            Please login or signup if you don't have an account.
+        </div>
+    {% endif %}
+
+{% endblock %}

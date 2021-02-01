@@ -1,0 +1,22 @@
+.navbar-brand {
+    font-family: sans-serif;
+}
+
+.container img {
+    max-height: 10%;
+    max-width: 10%;
+    padding-right: 10px;
+}
+
+.welcome {
+    text-align: center;
+    padding: 10px;
+}
+
+.welcome .row {
+    margin: 10px 10px;
+}
+
+.welcome .btn {
+    margin: 0 10px;
+}

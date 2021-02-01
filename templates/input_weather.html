@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Weather Station Entry{% endblock  %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'input' %}">Input</a></li>
+    <li class="breadcrumb-item active">Weather Station</li>
+{% endblock  %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+        <div  {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}> {{ message }} </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+        {% include 'includes/form.html' %}
+        <button type="submit" class="btn btn-success">Enter the Item</button>
+        <a href="{% url 'input' %}" class="btn btn-primary">Back</a>
+    </form>
+{% endblock  %}

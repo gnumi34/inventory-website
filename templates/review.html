@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="breadcrumb-item active">Review Inventory Data</li>
+{% endblock %}
+
+{% block content %}
+    <div class="welcome">
+        What kind of items do you want to review?<br>
+        <div class="row">
+            <a href="{% url 'review_inverter' %}" class="btn btn-primary col">Inverter</a>
+            <a href="{% url 'review_monitoring' %}" class="btn btn-primary col">Monitoring</a>
+            <a href="{% url 'review_weather_station' %}" class="btn btn-primary col">Weather Station</a>
+            <a href="{% url 'review_sensor' %}" class="btn btn-primary col">Sensor</a>
+            <a href="{% url 'review_solarcc' %}" class="btn btn-primary col">Solar Charging Controller</a>
+        </div>
+        <div class="row">
+            <a href="{% url 'review_pv_module' %}" class="btn btn-primary col">PV Module</a>
+            <a href="{% url 'review_battery' %}" class="btn btn-primary col">Battery</a>
+            <a href="{% url 'review_lv_panel' %}" class="btn btn-primary col">LV Panel</a>
+            <a href="{% url 'review_mv_panel' %}" class="btn btn-primary col">MV Panel</a>
+            <a href="{% url 'review_trafo' %}" class="btn btn-primary col">Transformer</a>
+        </div>
+        <div class="row">
+            <a href="{% url 'review_all_in_one' %}" class="btn btn-primary col">All in One</a>
+            <a href="{% url 'review_mounting' %}" class="btn btn-primary col">Mounting</a>
+        </div>
+    </div>
+{% endblock %}
