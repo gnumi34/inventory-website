@@ -1,5 +1,4 @@
 from django import forms
-from django.db.models import fields
 from . import models
 
 class InverterForm(forms.ModelForm):
@@ -233,7 +232,7 @@ class InverterSearchForm(forms.Form):
         ('Off', 'Off-Grid')
     ]
 
-    merk = forms.ChoiceField(choices=merk_choices, label='Merk')
+    merk = forms.ChoiceField(choices=merk_choices, label='Brand')
     phase = forms.ChoiceField(choices=PHASE_CHOISES, label='Inverter Phases')
-    application = forms.ChoiceField(choices=APPLICATION_CHOISES, label='Inverter Applications')
+    application = forms.ChoiceField(choices=APPLICATION_CHOISES, label='Inverter Application')
     search = forms.CharField(max_length=100, label='Search')
