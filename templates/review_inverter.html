@@ -11,14 +11,15 @@
 {% endblock %}
 
 {% block content %}
-    <div class="search_box">
-        <form action="{% url 'review_inverter' %}" method="get" novalidate>
-            {% for field in form %}
-                {{ field }}
-            {% endfor %}
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
-    </div>
+    <form action="{% url 'review_inverter' %}" method="get" class="search-box mb-4" novalidate>
+        {% for field in form %}
+            <div class="fieldWrapper">
+                {{ field.errors }}
+                {{ field.label_tag }}<br>{{ field }}
+            </div>
+        {% endfor %}
+        <input type="submit" value="Search" class="btn btn-primary">
+    </form>
 
     <table class="table mb-4 mt-4">
         <thead class="thead-inverse">
