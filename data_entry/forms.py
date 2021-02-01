@@ -1,4 +1,5 @@
 from django import forms
+from django.db.utils import OperationalError
 from . import models
 
 class InverterForm(forms.ModelForm):
@@ -214,11 +215,14 @@ class InverterSearchForm(forms.Form):
     merk_choices = [
         ('', '-------'),
     ]
-    for object in all_inverter:
-        if (object.merk, object.merk) in merk_choices:
-            continue
-        else:
-            merk_choices.append((object.merk, object.merk))
+    try:
+    	for object in all_inverter:
+            if (object.merk, object.merk) in merk_choices:
+                continue
+            else:
+            	merk_choices.append((object.merk, object.merk))
+    except OperationalError:
+    	pass
 
     PHASE_CHOISES = [
         ('', '-------'),

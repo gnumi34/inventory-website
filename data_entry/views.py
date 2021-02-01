@@ -1,13 +1,12 @@
-from django.db.models import query
-from django.db.models.query_utils import Q
 import requests
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.views.generic import ListView
+from django.db.models.query_utils import Q
 from .forms import *
 from .models import *
-from django.views.generic import ListView
 
 # Create your views here.
 def home(request):
