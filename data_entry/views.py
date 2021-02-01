@@ -1,3 +1,4 @@
+from django.db.models.query_utils import Q
 import requests
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
@@ -30,11 +31,11 @@ def input_inverter(request):
             if inverter.kurs == '$':
                 response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'USD'})
                 rates = response.json()['rates']
-                inverter.idr_value = rates['IDR'] * inverter.value
+                inverter.idr_value = round(rates['IDR'] * inverter.value, 2)
             else:
                 response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'EUR'})
                 rates = response.json()['rates']
-                inverter.idr_value = rates['IDR'] * inverter.value
+                inverter.idr_value = round(rates['IDR'] * inverter.value, 2)
             inverter.save()
             return redirect('inverter')
     else:
@@ -94,11 +95,11 @@ def input_solarcc(request):
             if scc.kurs == '$':
                 response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'USD'})
                 rates = response.json()['rates']
-                scc.idr_value = rates['IDR'] * scc.value
+                scc.idr_value = round(rates['IDR'] * scc.value, 2)
             else:
                 response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'EUR'})
                 rates = response.json()['rates']
-                scc.idr_value = rates['IDR'] * scc.value
+                scc.idr_value = round(rates['IDR'] * scc.value, 2)
             scc.save()
             return redirect('solarcc')
     else:
@@ -130,11 +131,11 @@ def input_battery(request):
             if battery.kurs == '$':
                 response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'USD'})
                 rates = response.json()['rates']
-                battery.idr_value = rates['IDR'] * battery.value
+                battery.idr_value = round(rates['IDR'] * battery.value, 2)
             else:
                 response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'EUR'})
                 rates = response.json()['rates']
-                battery.idr_value = rates['IDR'] * battery.value
+                battery.idr_value = round(rates['IDR'] * battery.value, 2)
             battery.save()
             return redirect('battery')
     else:
@@ -194,11 +195,11 @@ def input_aio(request):
             if all_in_one.kurs == '$':
                 response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'USD'})
                 rates = response.json()['rates']
-                all_in_one.idr_value = rates['IDR'] * all_in_one.value
+                all_in_one.idr_value = round(rates['IDR'] * all_in_one.value, 2)
             else:
                 response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'EUR'})
                 rates = response.json()['rates']
-                all_in_one.idr_value = rates['IDR'] * all_in_one.value
+                all_in_one.idr_value = round(rates['IDR'] * all_in_one.value, 2)
             all_in_one.save()
             return redirect('all_in_one')
     else:
@@ -219,10 +220,36 @@ def input_mounting(request):
         form = MountingForm()
     return render(request, 'input_mv_panel.html', {'form': form})
 
+
 @method_decorator(decorator=login_required, name='dispatch')
 class InverterListView(ListView):
     model = Inverter
+    context_object_name = 'inverters'
     template_name = "review_inverter.html"
+
+    def get_queryset(self):
+        merk_query = self.request.GET.get('merk')
+        application_query = self.request.GET.get('application')
+        phase_query = self.request.GET.get('phase')
+        search_query = self.request.GET.get('search')
+        if search_query or merk_query or application_query or phase_query:
+            queryset = self.model.objects.filter(
+                Q(merk__icontains=search_query) & Q(aplikasi__icontains=search_query)
+                & Q(tipe__icontains=search_query) & Q(jenis__icontains=search_query) &
+                Q(merk__icontains=merk_query) & Q(aplikasi__icontains=application_query)
+                & Q(phase__icontains=phase_query)
+            )
+            return queryset
+        else:
+            queryset = self.model.objects.all()
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = InverterSearchForm
+        return context
+    
+    
 
 @login_required
 def review_monitoring(request):

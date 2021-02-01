@@ -211,4 +211,29 @@ class MountingForm(forms.ModelForm):
 
 
 class InverterSearchForm(forms.Form):
-    pass
+    all_inverter = models.Inverter.objects.all()
+    merk_choices = [
+        ('', '-------'),
+    ]
+    for object in all_inverter:
+        if (object.merk, object.merk) in merk_choices:
+            continue
+        else:
+            merk_choices.append((object.merk, object.merk))
+
+    PHASE_CHOISES = [
+        ('', '-------'),
+        ('Single Phase', "Single Phase"),
+        ('Triple Phase', "Triple Phase"),
+    ]
+
+    APPLICATION_CHOISES = [
+        ('', '-------'),
+        ('On', 'On-Grid'),
+        ('Off', 'Off-Grid')
+    ]
+
+    merk = forms.ChoiceField(choices=merk_choices, label='Merk')
+    phase = forms.ChoiceField(choices=PHASE_CHOISES, label='Inverter Phases')
+    application = forms.ChoiceField(choices=APPLICATION_CHOISES, label='Inverter Applications')
+    search = forms.CharField(max_length=100, label='Search')
