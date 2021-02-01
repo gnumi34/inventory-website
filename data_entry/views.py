@@ -1,3 +1,4 @@
+from django.db.models import query
 from django.db.models.query_utils import Q
 import requests
 from django.shortcuts import redirect, render
@@ -233,12 +234,20 @@ class InverterListView(ListView):
         phase_query = self.request.GET.get('phase')
         search_query = self.request.GET.get('search')
         if search_query or merk_query or application_query or phase_query:
-            queryset = self.model.objects.filter(
-                Q(merk__icontains=search_query) & Q(aplikasi__icontains=search_query)
-                & Q(tipe__icontains=search_query) & Q(jenis__icontains=search_query) &
-                Q(merk__icontains=merk_query) & Q(aplikasi__icontains=application_query)
-                & Q(phase__icontains=phase_query)
-            )
+            if search_query.isnumeric():
+                queryset = self.model.objects.filter(
+                    (Q(merk__icontains=search_query) | Q(aplikasi__icontains=search_query)
+                    & Q(tipe__icontains=search_query) | Q(jenis__icontains=search_query) |
+                    Q(kva=float(search_query))) & Q(merk__icontains=merk_query) & 
+                    Q(aplikasi__icontains=application_query) & Q(phase__icontains=phase_query)
+                )
+            else:
+                queryset = self.model.objects.filter(
+                    Q(merk__icontains=search_query) & Q(aplikasi__icontains=search_query)
+                    & Q(tipe__icontains=search_query) & Q(jenis__icontains=search_query) &
+                    Q(merk__icontains=merk_query) & Q(aplikasi__icontains=application_query)
+                    & Q(phase__icontains=phase_query)
+                )
             return queryset
         else:
             queryset = self.model.objects.all()
@@ -246,7 +255,12 @@ class InverterListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = InverterSearchForm
+        context['form'] = InverterSearchForm(initial={
+            'merk': self.request.GET.get('merk', ''),
+            'phase': self.request.GET.get('phase', ''),
+            'application': self.request.GET.get('application', ''),
+            'search': self.request.GET.get('search', '')
+        })
         return context
     
     
