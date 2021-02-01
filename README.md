@@ -31,17 +31,31 @@ Planned features:
 
     `virtualenv venv`
 
-4. Install the requirements:
+4. On Linux, activate the isolated environment using:
+
+    `source venv/bin/activate`
+
+    While on Windows, activate the isolated environment based on your terminal.
+
+    For Command Prompt: `venv\Scripts\activate.bat`
+
+    For PowerShell: `venv\Scripts\activate.ps1`
+
+    Make sure the terminal is shown like this:
+
+    `(venv) user@laptop:/home/user/inventory-website/`
+
+5. Install the requirements:
 
     `pip install -r requirements.txt`
 
-5. Run migrations to create DB file:
+6. Run migrations to create DB file:
 
     `python3 manage.py makemigrations data_entry`
 
     `python3 manage.py migrate`
 
-6. Run the apps:
+7. Run the apps:
    
    `python3 manage.py runserver`
 
