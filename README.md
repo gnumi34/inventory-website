@@ -21,17 +21,15 @@ Planned features:
 5. Your chosen IDE configured for developing Django Apps
 
 ## Local Deployment Steps
-1. Install Python (if not yet installed) and pip (Python Package Manager). Then install virtualenv using:
-   
-   `pip install virtualenv`.
+1. Install Python, pip (Python Package Manager) and virtualenv if you have not installed them.
 
-2. Create new isolated environment for project using on a new folder this command:
-
-    `virtualenv venv`
-
-3. Clone this repository using:
+2. Clone this repository using:
    
    `git clone https://github.com/gnumi34/inventory-website.git`
+
+3. Create new isolated environment for project inside inventory-website folder using:
+
+    `virtualenv venv`
 
 4. Install the requirements:
 
