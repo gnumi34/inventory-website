@@ -100,7 +100,7 @@ class PVModuleForm(forms.ModelForm):
     class Meta:
         model = models.PVModule
         fields = [
-            'merk', 'item', 'tipe', 'kw_value',
+            'merk', 'item', 'tipe', 'kw_value', 'kurs',
             'wp_price', 'contact', 'period'
         ]
 

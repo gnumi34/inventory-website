@@ -1,16 +1,15 @@
 {% extends 'base_review.html' %}
 
-{% block title_category %}Inverter{% endblock %}
+{% block title_category %}All-in-One{% endblock %}
 
-{% block bc_category %}Inverter{% endblock %}
+{% block bc_category %}All-in-One{% endblock %}
 
-{% block url_review %}{% url 'review_inverter' %}{% endblock  %}
+{% block url_review %}{% url 'review_all_in_one' %}{% endblock  %}
 
 {% block table_header %}
     <th>Brand</th>
     <th>Model Name</th>
     <th>Type</th>
-    <th>Application</th>
     <th>Phase</th>
     <th>Capacity</th>
     <th>Price</th>
@@ -21,11 +20,10 @@
    
 {% block table_data %}
     <td>{{ object.merk }}</td>
+    <td>{{ object.item }}</td>
     <td>{{ object.tipe }}</td>
-    <td>{{ object.jenis }}</td>
-    <td>{{ object.aplikasi }}</td>
     <td>{{ object.phase }}</td>
-    <td>{{ object.kva }} KVA</td>
+    <td>{{ object.kva }}</td>
     <td>Rp. {{ object.idr_value }},-</td>
     <td>{{ object.contact }}</td>
     <td>{{ object.period }}</td>

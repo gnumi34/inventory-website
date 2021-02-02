@@ -1,0 +1,34 @@
+{% extends 'base_review.html' %}
+
+{% block title_category %}Battery{% endblock %}
+
+{% block bc_category %}Battery{% endblock %}
+
+{% block url_review %}{% url 'review_battery' %}{% endblock  %}
+
+{% block table_header %}
+    <th>Brand</th>
+    <th>Model Name</th>
+    <th>Type</th>
+    <th>Additional Info</th>
+    <th>Cell Voltage</th>
+    <th>Battery Capacity</th>
+    <th>Battery Power</th>
+    <th>Price</th>
+    <th>Contact Info</th>
+    <th>Period</th>
+    <th>Options</th>
+{% endblock  %}
+   
+{% block table_data %}
+    <td>{{ object.merk }}</td>
+    <td>{{ object.item }}</td>
+    <td>{{ object.tipe }}</td>
+    <td>{{ object.keterangan }}</td>
+    <td>{{ object.v_per_cell }} V</td>
+    <td>{{ object.capacity }} Ah</td>
+    <td>{{ object.kwh }} KWh</td>
+    <td>Rp. {{ object.idr_value }},-</td>
+    <td>{{ object.contact }}</td>
+    <td>{{ object.period }}</td>
+{% endblock  %}

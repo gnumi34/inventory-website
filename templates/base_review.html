@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% block title_category %}{% endblock  %} Review
+{% endblock %}
+
+{% block breadcrumb %}
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'review' %}">Review</a></li>
+                <li class="breadcrumb-item active">{% block bc_category %}{% endblock  %} Review</li>
+{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+        <div  {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}> {{ message }} </div>
+        {% endfor %}
+    {% endif %}
+
+    <form action="{% block url_review %}{% endblock  %}" method="get" class="search-box mb-4" novalidate>
+        {% for field in form %}
+            <div class="fieldWrapper">
+                {{ field.errors }}
+                {{ field.label_tag }}<br>{{ field }}
+            </div>
+        {% endfor %}
+        <input type="submit" value="Search" class="btn btn-primary">
+    </form>
+
+    <table class="table mb-4 mt-4">
+        <thead class="thead-inverse">
+            <tr>
+                {% block table_header %}{% endblock  %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for object in objects %}
+                <tr>
+                    {% block table_data %}{% endblock  %}
+                    <td>
+                        <a href="{% url 'edit_inverter' object.pk %}">Edit</a><br>
+                        <a href="{% url 'delete_inverter' object.pk %}">Delete</a><br>
+                        <a href="{% url 'history_inverter' object.pk %}">Show Update History</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+{% endblock %}

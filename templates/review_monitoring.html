@@ -1,0 +1,26 @@
+{% extends 'base_review.html' %}
+
+{% block title_category %}Monitoring{% endblock %}
+
+{% block bc_category %}Monitoring{% endblock %}
+
+{% block url_review %}{% url 'review_monitoring' %}{% endblock  %}
+
+{% block table_header %}
+    <th>Brand</th>
+    <th>Model Name</th>
+    <th>Type</th>
+    <th>Price</th>
+    <th>Contact Info</th>
+    <th>Period</th>
+    <th>Options</th>
+{% endblock  %}
+   
+{% block table_data %}
+    <td>{{ object.merk }}</td>
+    <td>{{ object.item }}</td>
+    <td>{{ object.tipe }}</td>
+    <td>US$ {{ object.usd_value }},-</td>
+    <td>{{ object.contact }}</td>
+    <td>{{ object.period }}</td>
+{% endblock  %}

@@ -21,6 +21,10 @@
     margin: 0 10px;
 }
 
+.table {
+    font-size: 11pt;
+}
+
 .search-box {
     display: flex;
     justify-content: center;

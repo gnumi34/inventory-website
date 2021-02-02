@@ -114,10 +114,16 @@ class SolarCC(models.Model):
 
 
 class PVModule(models.Model):
+    KURS_UANG = [
+        ('$', 'USD'),
+        ('E', 'Euro'),
+    ]
+
     merk = models.CharField(max_length=30, unique=False)
     item = models.CharField(max_length=100, unique=False)
     tipe = models.CharField(max_length=50, unique=False)
     kw_value = models.FloatField(help_text="Please insert the value in Wp.")
+    kurs = models.CharField(max_length=5, choices=KURS_UANG)
     wp_price = models.FloatField(help_text="Please insert the price per Wp in USD.")
     contact = models.CharField(max_length=25)
     period = models.CharField(max_length=30)
@@ -251,10 +257,16 @@ class AllInOne(models.Model):
 
 
 class Mounting(models.Model):
+    KURS_UANG = [
+        ('$', 'USD'),
+        ('E', 'Euro'),
+    ]
+
     merk = models.CharField(max_length=30, unique=False)
     item = models.CharField(max_length=100, unique=False)
     tipe = models.CharField(max_length=50, unique=False)
     kw_value = models.FloatField(help_text="Please insert the value in Wp.")
+    kurs = models.CharField(max_length=5, choices=KURS_UANG)
     wp_price = models.FloatField(help_text="Please insert the price per Wp in USD.")
     contact = models.CharField(max_length=25)
     period = models.CharField(max_length=30)

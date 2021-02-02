@@ -1,0 +1,28 @@
+{% extends 'base_review.html' %}
+
+{% block title_category %}Transformer{% endblock %}
+
+{% block bc_category %}Transformer{% endblock %}
+
+{% block url_review %}{% url 'review_trafo' %}{% endblock  %}
+
+{% block table_header %}
+    <th>Brand</th>
+    <th>Model Name</th>
+    <th>Type</th>
+    <th>Trafo Capacity</th>
+    <th>Price</th>
+    <th>Year</th>
+    <th>Distributor</th>
+    <th>Options</th>
+{% endblock  %}
+   
+{% block table_data %}
+    <td>{{ object.merk }}</td>
+    <td>{{ object.item }}</td>
+    <td>{{ object.tipe }}</td>
+    <td>{{ object.kva_value }}</td>
+    <td>US$ {{ object.usd_value }},-</td>
+    <td>{{ object.year }}</td>
+    <td>{{ object.distributor }}</td>
+{% endblock  %}

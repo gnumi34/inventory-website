@@ -1,0 +1,28 @@
+{% extends 'base_review.html' %}
+
+{% block title_category %}PV Module{% endblock %}
+
+{% block bc_category %}PV Module{% endblock %}
+
+{% block url_review %}{% url 'review_pv_module' %}{% endblock  %}
+
+{% block table_header %}
+    <th>Brand</th>
+    <th>Model Name</th>
+    <th>Type</th>
+    <th>Module Power</th>
+    <th>Price per Wp</th>
+    <th>Contact Info</th>
+    <th>Period</th>
+    <th>Options</th>
+{% endblock  %}
+   
+{% block table_data %}
+    <td>{{ object.merk }}</td>
+    <td>{{ object.item }}</td>
+    <td>{{ object.tipe }}</td>
+    <td>{{ object.kw_value }} V</td>
+    <td>{% if object.kurs == '$' %}US$ {% else %}EUR {% endif %}{{ object.wp_price }},-</td>
+    <td>{{ object.contact }}</td>
+    <td>{{ object.period }}</td>
+{% endblock  %}
