@@ -3,8 +3,10 @@ from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.views.generic import ListView
+from django.views.generic import ListView, UpdateView, DeleteView
 from django.db.models.query_utils import Q
+from django.utils import timezone
+from django.urls import reverse_lazy
 from .forms import *
 from .models import *
 
@@ -242,8 +244,8 @@ class InverterListView(ListView):
                 )
             else:
                 queryset = self.model.objects.filter(
-                    Q(merk__icontains=search_query) & Q(aplikasi__icontains=search_query)
-                    & Q(tipe__icontains=search_query) & Q(jenis__icontains=search_query) &
+                    (Q(merk__icontains=search_query) | Q(aplikasi__icontains=search_query)
+                    | Q(tipe__icontains=search_query) | Q(jenis__icontains=search_query)) &
                     Q(merk__icontains=merk_query) & Q(aplikasi__icontains=application_query)
                     & Q(phase__icontains=phase_query)
                 )
@@ -261,8 +263,54 @@ class InverterListView(ListView):
             'search': self.request.GET.get('search', '')
         })
         return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class InverterEdit(UpdateView):
+    model = Inverter
+    form_class = InverterForm
+    template_name = 'edit_inverter.html'
+    success_url = reverse_lazy('review_inverter')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Item Succesfully Edited!')
+        inverter = form.save(commit=False)
+        inverter.updated_at = timezone.now()
+        inverter.updated_by = self.request.user
+        if inverter.kurs == '$':
+            response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'USD'})
+            rates = response.json()['rates']
+            inverter.idr_value = round(rates['IDR'] * inverter.value, 2)
+        else:
+            response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'EUR'})
+            rates = response.json()['rates']
+            inverter.idr_value = round(rates['IDR'] * inverter.value, 2)
+        inverter.save()
+        return redirect('review_inverter')
     
-    
+
+@method_decorator(decorator=login_required, name='dispatch')
+class InverterDelete(DeleteView):
+    model = Inverter
+    template_name = 'delete_item.html'
+    success_url = reverse_lazy('review_inverter')
+    success_message = "Item Deleted Successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(InverterDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class InverterHistory(ListView):
+    model = Inverter
+    context_object_name = 'inverter'
+    template_name = "history_inverter.html"
+
+    def get_queryset(self):
+        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
+        return queryset
+
 
 @login_required
 def review_monitoring(request):

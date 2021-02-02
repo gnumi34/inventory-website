@@ -32,6 +32,8 @@ class Inverter(models.Model):
     period = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     entry_by = models.ForeignKey(User, related_name='inverters', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
@@ -46,6 +48,8 @@ class Monitoring(models.Model):
     period = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     entry_by = models.ForeignKey(User, related_name='monitors', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
@@ -60,6 +64,8 @@ class WeatherStation(models.Model):
     period = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     entry_by = models.ForeignKey(User, related_name='wstations', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
@@ -74,6 +80,8 @@ class Sensor(models.Model):
     period = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     entry_by = models.ForeignKey(User, related_name='sensors', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
@@ -98,6 +106,8 @@ class SolarCC(models.Model):
     period = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     entry_by = models.ForeignKey(User, related_name='solarccs', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
@@ -113,6 +123,8 @@ class PVModule(models.Model):
     period = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     entry_by = models.ForeignKey(User, related_name='pv_modules', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
@@ -138,6 +150,8 @@ class Battery(models.Model):
     period = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     entry_by = models.ForeignKey(User, related_name='batteries', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
@@ -152,6 +166,8 @@ class LVPanel(models.Model):
     period = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     entry_by = models.ForeignKey(User, related_name='lv_panels', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
@@ -166,6 +182,8 @@ class MVPanel(models.Model):
     period = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     entry_by = models.ForeignKey(User, related_name='mv_panels', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
@@ -198,6 +216,8 @@ class Trafo(models.Model):
     distributor = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     entry_by = models.ForeignKey(User, related_name='transformers', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
 
 class AllInOne(models.Model):
@@ -223,6 +243,8 @@ class AllInOne(models.Model):
     period = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     entry_by = models.ForeignKey(User, related_name='aios', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
@@ -238,6 +260,8 @@ class Mounting(models.Model):
     period = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     entry_by = models.ForeignKey(User, related_name='mountings', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)

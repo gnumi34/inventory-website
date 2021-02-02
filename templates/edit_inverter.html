@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Edit Inverter{% endblock  %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'input' %}">Review</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'review_inverter' %}">Inverter Review</a></li>
+    <li class="breadcrumb-item active">Edit Inverter</li>
+{% endblock  %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+        <div  {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}> {{ message }} </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+        {% include 'includes/form.html' %}
+        <button type="submit" class="btn btn-success">Submit Edit</button>
+        <a href="{% url 'review_inverter' %}" class="btn btn-primary">Back</a>
+    </form>
+{% endblock  %}

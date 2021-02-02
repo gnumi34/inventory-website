@@ -11,6 +11,12 @@
 {% endblock %}
 
 {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+        <div  {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}> {{ message }} </div>
+        {% endfor %}
+    {% endif %}
+
     <form action="{% url 'review_inverter' %}" method="get" class="search-box mb-4" novalidate>
         {% for field in form %}
             <div class="fieldWrapper">
@@ -33,7 +39,7 @@
                 <th>Price</th>
                 <th>Submitted By</th>
                 <th>Date Submitted</th>
-                <th>Option</th>
+                <th>Options</th>
             </tr>
         </thead>
         <tbody>
@@ -48,7 +54,11 @@
                     <td>Rp. {{ object.idr_value }},-</td>
                     <td>{{ object.entry_by.username }}</td>
                     <td>{{ object.created_at }}</td>
-                    <td><a href="#">Edit</a></td>
+                    <td>
+                        <a href="{% url 'edit_inverter' object.pk %}">Edit</a><br>
+                        <a href="{% url 'delete_inverter' object.pk %}">Delete</a><br>
+                        <a href="{% url 'history_inverter' object.pk %}">Show Update History</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
