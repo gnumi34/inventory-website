@@ -5,6 +5,7 @@ The website is developed using Django Web Framework. It is used for managing inv
 Currently supports items entry based on category only.
 
 Planned features:
+
 1. Inventory list view.
 2. Search items based on item's name.
 3. Sort view based on columns.
@@ -12,26 +13,34 @@ Planned features:
 5. Edit items.
 6. Delete items.
 
+## Requirements
 
-## Requirements:
 1. Windows 8/8.1 above (Windows 7 or older can only use Django version 2), Linux, or Mac OS X
 2. Python with minimum version of 3.8.6
 3. Virtualenv module
-4. .env file of this project (ask me on email!)
-5. Your chosen IDE configured for developing Django Apps
+4. Memcached installed
+5. .env file of this project (ask me on email!)
+6. Your chosen IDE configured for developing Django Apps
 
 ## Local Deployment Steps
-1. Install Python, pip (Python Package Manager) and virtualenv if you have not installed them.
 
-2. Clone this repository using:
-   
+1. Install Python, pip (Python Package Manager), virtualenv, and memcached if you have not installed them.
+
+2. Open your OS's terminal. Start memcached with this command:
+
+    `memcached -p 11211`
+
+    Don't close the terminal window!
+
+3. Clone this repository using:
+
    `git clone https://github.com/gnumi34/inventory-website.git`
 
-3. Create new isolated environment for project inside inventory-website folder using:
+4. Create new isolated environment for project inside inventory-website folder using:
 
     `virtualenv venv`
 
-4. On Linux, activate the isolated environment using:
+5. On Linux, activate the isolated environment using:
 
     `source venv/bin/activate`
 
@@ -45,18 +54,18 @@ Planned features:
 
     `(venv) user@laptop:/home/user/inventory-website/`
 
-5. Install the requirements:
+6. Install the requirements:
 
     `pip install -r requirements.txt`
 
-6. Run migrations to create DB file:
+7. Run migrations to create DB file:
 
     `python3 manage.py makemigrations data_entry`
 
     `python3 manage.py migrate`
 
-7. Run the apps:
-   
+8. Run the apps:
+
    `python3 manage.py runserver`
 
    and open the apps on `localhost:8000`

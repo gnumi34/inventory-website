@@ -1,4 +1,5 @@
 import requests
+from django.core.cache import cache
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -9,6 +10,17 @@ from django.utils import timezone
 from django.urls import reverse_lazy
 from .forms import *
 from .models import *
+
+# Place basic function here
+def get_idr_conversion_value(kurs):
+    if kurs == '$':
+        response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'USD'})
+        rates = response.json()['rates']
+        return rates['IDR']
+    else:
+        response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'EUR'})
+        rates = response.json()['rates']
+        return rates['IDR']
 
 # Create your views here.
 def home(request):
@@ -31,13 +43,9 @@ def input_inverter(request):
             inverter = form.save(commit=False)
             inverter.entry_by = request.user
             if inverter.kurs == '$':
-                response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'USD'})
-                rates = response.json()['rates']
-                inverter.idr_value = round(rates['IDR'] * inverter.value, 2)
+                inverter.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * inverter.value, 2)
             else:
-                response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'EUR'})
-                rates = response.json()['rates']
-                inverter.idr_value = round(rates['IDR'] * inverter.value, 2)
+                inverter.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * inverter.value, 2)
             inverter.save()
             return redirect('inverter')
     else:
@@ -95,13 +103,9 @@ def input_solarcc(request):
             scc = form.save(commit=False)
             scc.entry_by = request.user
             if scc.kurs == '$':
-                response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'USD'})
-                rates = response.json()['rates']
-                scc.idr_value = round(rates['IDR'] * scc.value, 2)
+                scc.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * scc.value, 2)
             else:
-                response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'EUR'})
-                rates = response.json()['rates']
-                scc.idr_value = round(rates['IDR'] * scc.value, 2)
+                scc.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * scc.value, 2)
             scc.save()
             return redirect('solarcc')
     else:
@@ -131,13 +135,9 @@ def input_battery(request):
             battery = form.save(commit=False)
             battery.entry_by = request.user
             if battery.kurs == '$':
-                response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'USD'})
-                rates = response.json()['rates']
-                battery.idr_value = round(rates['IDR'] * battery.value, 2)
+                battery.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * battery.value, 2)
             else:
-                response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'EUR'})
-                rates = response.json()['rates']
-                battery.idr_value = round(rates['IDR'] * battery.value, 2)
+                battery.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * battery.value, 2)
             battery.save()
             return redirect('battery')
     else:
@@ -195,13 +195,9 @@ def input_aio(request):
             all_in_one = form.save(commit=False)
             all_in_one.entry_by = request.user
             if all_in_one.kurs == '$':
-                response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'USD'})
-                rates = response.json()['rates']
-                all_in_one.idr_value = round(rates['IDR'] * all_in_one.value, 2)
+                all_in_one.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * all_in_one.value, 2)
             else:
-                response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'EUR'})
-                rates = response.json()['rates']
-                all_in_one.idr_value = round(rates['IDR'] * all_in_one.value, 2)
+                all_in_one.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * all_in_one.value, 2)
             all_in_one.save()
             return redirect('all_in_one')
     else:
@@ -226,7 +222,7 @@ def input_mounting(request):
 @method_decorator(decorator=login_required, name='dispatch')
 class InverterListView(ListView):
     model = Inverter
-    context_object_name = 'inverters'
+    context_object_name = 'objects'
     template_name = "review_inverter.html"
 
     def get_queryset(self):
@@ -278,13 +274,9 @@ class InverterEdit(UpdateView):
         inverter.updated_at = timezone.now()
         inverter.updated_by = self.request.user
         if inverter.kurs == '$':
-            response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'USD'})
-            rates = response.json()['rates']
-            inverter.idr_value = round(rates['IDR'] * inverter.value, 2)
+            inverter.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * inverter.value, 2)
         else:
-            response = requests.get('https://api.exchangeratesapi.io/latest', params={'base': 'EUR'})
-            rates = response.json()['rates']
-            inverter.idr_value = round(rates['IDR'] * inverter.value, 2)
+            inverter.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * inverter.value, 2)
         inverter.save()
         return redirect('review_inverter')
     
@@ -292,7 +284,7 @@ class InverterEdit(UpdateView):
 @method_decorator(decorator=login_required, name='dispatch')
 class InverterDelete(DeleteView):
     model = Inverter
-    template_name = 'delete_item.html'
+    template_name = 'delete_inverter.html'
     success_url = reverse_lazy('review_inverter')
     success_message = "Item Deleted Successfully!"
 
