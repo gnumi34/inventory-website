@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Edit {{ object.merk }} {% if object.jenis %}{{ object.tipe }} {{ object.jenis }} {% else %}{{ object.item }} {% endif %}{% endblock  %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'review' %}">Review</a></li>
+    <li class="breadcrumb-item"><a href="{% block url %}{% endblock %}">{% block bc_category %}{% endblock  %}</a></li>
+    <li class="breadcrumb-item active">Edit Item</li>
+{% endblock  %}
+
+{% block content %}
+    <h4 class="page-header">Edit {{ object.merk }} {% if object.jenis %}{{ object.tipe }} {{ object.jenis }} {% else %}{{ object.item }} {% endif %}</h4>
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+        {% include 'includes/form.html' %}
+        <button type="submit" class="btn btn-success">Submit Edit</button>
+        <a href="{% block url_return %}{% endblock  %}" class="btn btn-primary">Back</a>
+    </form>
+{% endblock  %}

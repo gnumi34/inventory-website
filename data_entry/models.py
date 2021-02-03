@@ -267,7 +267,7 @@ class Mounting(models.Model):
     tipe = models.CharField(max_length=50, unique=False)
     kw_value = models.FloatField(help_text="Please insert the value in Wp.")
     kurs = models.CharField(max_length=5, choices=KURS_UANG)
-    wp_price = models.FloatField(help_text="Please insert the price per Wp in USD.")
+    wp_price = models.FloatField(help_text="Please insert the price per Wp.")
     contact = models.CharField(max_length=25)
     period = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)

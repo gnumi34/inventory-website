@@ -21,6 +21,10 @@
     margin: 0 10px;
 }
 
+.page-header {
+    text-align: center;
+}
+
 .table {
     font-size: 11pt;
 }

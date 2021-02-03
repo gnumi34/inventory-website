@@ -26,3 +26,5 @@
     <td>{{ object.contact }}</td>
     <td>{{ object.period }}</td>
 {% endblock  %}
+
+{% block edit_category_url %}{% url 'edit_pv_module' object.pk %}{% endblock  %}

@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block breadcrumb %}
-                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'review' %}">Review</a></li>
-                <li class="breadcrumb-item active">{% block bc_category %}{% endblock  %} Review</li>
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'review' %}">Review</a></li>
+    <li class="breadcrumb-item active">{% block bc_category %}{% endblock  %} Review</li>
 {% endblock %}
 
 {% block content %}

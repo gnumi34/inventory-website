@@ -165,7 +165,7 @@ class TrafoForm(forms.ModelForm):
         self.fields['item'].label = 'Model Name'
         self.fields['tipe'].label = 'Type'
         self.fields['kva_value'].label = 'Transformer Capacity'
-        self.fields['price'].label = 'Price in USD'
+        self.fields['price'].label = 'Price in IDR'
 
     class Meta:
         model = models.Trafo
@@ -200,12 +200,13 @@ class MountingForm(forms.ModelForm):
         self.fields['item'].label = 'Model Name'
         self.fields['tipe'].label = 'Type'
         self.fields['kw_value'].label = 'Power Capacity'
+        self.fields['kurs'].label = 'Kurs'
         self.fields['wp_price'].label = 'Price per Wp'
 
     class Meta:
         model = models.Mounting
         fields = [
-            'merk', 'item', 'tipe', 'kw_value',
+            'merk', 'item', 'tipe', 'kw_value', 'kurs',
             'wp_price', 'contact', 'period'
         ]
 

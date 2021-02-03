@@ -265,6 +265,7 @@ class InverterListView(ListView):
 class InverterEdit(UpdateView):
     model = Inverter
     form_class = InverterForm
+    context_object_name = 'object'
     template_name = 'edit_inverter.html'
     success_url = reverse_lazy('review_inverter')
 
@@ -333,6 +334,23 @@ class MonitoringListView(ListView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
+class MonitoringEdit(UpdateView):
+    model = Monitoring
+    form_class = MonitoringForm
+    context_object_name = 'object'
+    template_name = 'edit_monitoring.html'
+    success_url = reverse_lazy('review_monitoring')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Item Succesfully Edited!')
+        monitoring = form.save(commit=False)
+        monitoring.updated_at = timezone.now()
+        monitoring.updated_by = self.request.user
+        monitoring.save()
+        return redirect('review_monitoring')
+
+
+@method_decorator(decorator=login_required, name='dispatch')
 class WeatherStationListView(ListView):
     model = WeatherStation
     context_object_name = 'objects'
@@ -358,6 +376,24 @@ class WeatherStationListView(ListView):
             'search': self.request.GET.get('search', '')
         })
         return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class WeatherStationEdit(UpdateView):
+    model = WeatherStation
+    form_class = WSForm
+    context_object_name = 'object'
+    template_name = 'edit_weather.html'
+    success_url = reverse_lazy('review_weather_station')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Item Succesfully Edited!')
+        wss = form.save(commit=False)
+        wss.updated_at = timezone.now()
+        wss.updated_by = self.request.user
+        wss.save()
+        return redirect('review_weather_station')
+
 
 @method_decorator(decorator=login_required, name='dispatch')
 class SensorListView(ListView):
@@ -388,6 +424,23 @@ class SensorListView(ListView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
+class SensorEdit(UpdateView):
+    model = Sensor
+    form_class = SensorForm
+    context_object_name = 'object'
+    template_name = 'edit_sensor.html'
+    success_url = reverse_lazy('review_sensor')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Item Succesfully Edited!')
+        sensor = form.save(commit=False)
+        sensor.updated_at = timezone.now()
+        sensor.updated_by = self.request.user
+        sensor.save()
+        return redirect('review_sensor')
+
+
+@method_decorator(decorator=login_required, name='dispatch')
 class SolarCCListView(ListView):
     model = SolarCC
     context_object_name = 'objects'
@@ -413,6 +466,27 @@ class SolarCCListView(ListView):
             'search': self.request.GET.get('search', '')
         })
         return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class SolarCCEdit(UpdateView):
+    model = SolarCC
+    form_class = SCCForm
+    context_object_name = 'object'
+    template_name = 'edit_solarcc.html'
+    success_url = reverse_lazy('review_solarcc')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Item Succesfully Edited!')
+        scc = form.save(commit=False)
+        scc.updated_at = timezone.now()
+        scc.updated_by = self.request.user
+        if scc.kurs == '$':
+            scc.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * scc.value, 2)
+        else:
+            scc.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * scc.value, 2)
+        scc.save()
+        return redirect('review_solarcc')
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -464,6 +538,23 @@ class PVModuleListView(ListView):
             'search': self.request.GET.get('search', '')
         })
         return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class PVModuleEdit(UpdateView):
+    model = PVModule
+    form_class = PVModuleForm
+    context_object_name = 'object'
+    template_name = 'edit_pv_module.html'
+    success_url = reverse_lazy('review_pv_module')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Item Succesfully Edited!')
+        pv_module = form.save(commit=False)
+        pv_module.updated_at = timezone.now()
+        pv_module.updated_by = self.request.user
+        pv_module.save()
+        return redirect('review_pv_module')
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -524,6 +615,27 @@ class BatteryListView(ListView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
+class BatteryEdit(UpdateView):
+    model = Battery
+    form_class = BatteryForm
+    context_object_name = 'object'
+    template_name = 'edit_battery.html'
+    success_url = reverse_lazy('review_battery')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Item Succesfully Edited!')
+        battery = form.save(commit=False)
+        battery.updated_at = timezone.now()
+        battery.updated_by = self.request.user
+        if battery.kurs == '$':
+            battery.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * battery.value, 2)
+        else:
+            battery.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * battery.value, 2)
+        battery.save()
+        return redirect('review_battery')
+
+
+@method_decorator(decorator=login_required, name='dispatch')
 class LVPanelListView(ListView):
     model = LVPanel
     context_object_name = 'objects'
@@ -552,6 +664,23 @@ class LVPanelListView(ListView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
+class LVPanelEdit(UpdateView):
+    model = LVPanel
+    form_class = LVPanelForm
+    context_object_name = 'object'
+    template_name = 'edit_lv_panel.html'
+    success_url = reverse_lazy('review_lv_panel')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Item Succesfully Edited!')
+        lv_panel = form.save(commit=False)
+        lv_panel.updated_at = timezone.now()
+        lv_panel.updated_by = self.request.user
+        lv_panel.save()
+        return redirect('review_lv_panel')
+
+
+@method_decorator(decorator=login_required, name='dispatch')
 class MVPanelListView(ListView):
     model = MVPanel
     context_object_name = 'objects'
@@ -577,6 +706,23 @@ class MVPanelListView(ListView):
             'search': self.request.GET.get('search', '')
         })
         return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class MVPanelEdit(UpdateView):
+    model = MVPanel
+    form_class = MVPanelForm
+    context_object_name = 'object'
+    template_name = 'edit_mv_panel.html'
+    success_url = reverse_lazy('review_mv_panel')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Item Succesfully Edited!')
+        mv_panel = form.save(commit=False)
+        mv_panel.updated_at = timezone.now()
+        mv_panel.updated_by = self.request.user
+        mv_panel.save()
+        return redirect('review_mv_panel')
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -632,6 +778,23 @@ class TrafoListView(ListView):
             'search': self.request.GET.get('search', '')
         })
         return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class TrafoEdit(UpdateView):
+    model = Trafo
+    form_class = TrafoForm
+    context_object_name = 'object'
+    template_name = 'edit_trafo.html'
+    success_url = reverse_lazy('review_trafo')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Item Succesfully Edited!')
+        trafo = form.save(commit=False)
+        trafo.updated_at = timezone.now()
+        trafo.updated_by = self.request.user
+        trafo.save()
+        return redirect('review_trafo')
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -692,6 +855,27 @@ class AIOListView(ListView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
+class AIOEdit(UpdateView):
+    model = AllInOne
+    form_class = AIOForm
+    context_object_name = 'object'
+    template_name = 'edit_aio.html'
+    success_url = reverse_lazy('review_all_in_one')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Item Succesfully Edited!')
+        aio = form.save(commit=False)
+        aio.updated_at = timezone.now()
+        aio.updated_by = self.request.user
+        if aio.kurs == '$':
+            aio.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * aio.value, 2)
+        else:
+            aio.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * aio.value, 2)
+        aio.save()
+        return redirect('review_all_in_one')
+
+
+@method_decorator(decorator=login_required, name='dispatch')
 class MountingListView(ListView):
     model = Mounting
     context_object_name = 'objects'
@@ -740,3 +924,20 @@ class MountingListView(ListView):
             'search': self.request.GET.get('search', '')
         })
         return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class MountingEdit(UpdateView):
+    model = Mounting
+    form_class = MountingForm
+    context_object_name = 'object'
+    template_name = 'edit_mounting.html'
+    success_url = reverse_lazy('review_mounting')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Item Succesfully Edited!')
+        mounting = form.save(commit=False)
+        mounting.updated_at = timezone.now()
+        mounting.updated_by = self.request.user
+        mounting.save()
+        return redirect('review_mounting')
