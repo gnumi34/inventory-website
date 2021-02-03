@@ -38,9 +38,9 @@
                 <tr>
                     {% block table_data %}{% endblock  %}
                     <td>
-                        <a href="{% url 'edit_inverter' object.pk %}">Edit</a><br>
-                        <a href="{% url 'delete_inverter' object.pk %}">Delete</a><br>
-                        <a href="{% url 'history_inverter' object.pk %}">Show Update History</a>
+                        <a href="{% block edit_category_url %}{% endblock  %}">Edit</a><br>
+                        <a href="{% block delete_category_url %}{% endblock  %}">Delete</a><br>
+                        <a href="{% block history_category_url %}{% endblock  %}">Show Update History</a>
                     </td>
                 </tr>
             {% endfor %}

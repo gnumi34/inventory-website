@@ -30,3 +30,9 @@
     <td>{{ object.contact }}</td>
     <td>{{ object.period }}</td>
 {% endblock  %}
+
+{% block edit_category_url %}{% url 'edit_inverter' object.pk %}{% endblock  %}
+
+{% block delete_category_url %}{% url 'delete_inverter' object.pk %}{% endblock  %}
+
+{% block history_category_url %}{% url 'history_inverter' object.pk %}{% endblock  %}

@@ -165,13 +165,13 @@ class TrafoForm(forms.ModelForm):
         self.fields['item'].label = 'Model Name'
         self.fields['tipe'].label = 'Type'
         self.fields['kva_value'].label = 'Transformer Capacity'
-        self.fields['usd_value'].label = 'Price in USD'
+        self.fields['price'].label = 'Price in USD'
 
     class Meta:
         model = models.Trafo
         fields = [
             'merk', 'item', 'tipe', 'kva_value',
-            'usd_value', 'year', 'distributor'
+            'price', 'year', 'distributor'
         ]
 
 
@@ -211,12 +211,12 @@ class MountingForm(forms.ModelForm):
 
 
 class InverterSearchForm(forms.Form):
-    all_inverter = models.Inverter.objects.all()
+    all_objects = models.Inverter.objects.all()
     merk_choices = [
         ('', '-------'),
     ]
     try:
-    	for object in all_inverter:
+    	for object in all_objects:
             if (object.merk, object.merk) in merk_choices:
                 continue
             else:
@@ -239,4 +239,272 @@ class InverterSearchForm(forms.Form):
     merk = forms.ChoiceField(choices=merk_choices, label='Brand')
     phase = forms.ChoiceField(choices=PHASE_CHOISES, label='Inverter Phases')
     application = forms.ChoiceField(choices=APPLICATION_CHOISES, label='Inverter Application')
+    search = forms.CharField(max_length=100, label='Search')
+
+
+class MonitoringSearchForm(forms.Form):
+    all_objects = models.Monitoring.objects.all()
+    merk_choices = [
+        ('', '-------'),
+    ]
+    try:
+    	for object in all_objects:
+            if (object.merk, object.merk) in merk_choices:
+                continue
+            else:
+            	merk_choices.append((object.merk, object.merk))
+    except OperationalError:
+    	pass
+
+    merk = forms.ChoiceField(choices=merk_choices, label='Brand')
+    search = forms.CharField(max_length=100, label='Search')
+
+
+class WSSearchForm(forms.Form):
+    all_objects = models.WeatherStation.objects.all()
+    merk_choices = [
+        ('', '-------'),
+    ]
+    try:
+    	for object in all_objects:
+            if (object.merk, object.merk) in merk_choices:
+                continue
+            else:
+            	merk_choices.append((object.merk, object.merk))
+    except OperationalError:
+    	pass
+
+    merk = forms.ChoiceField(choices=merk_choices, label='Brand')
+    search = forms.CharField(max_length=100, label='Search')
+
+
+class SensorSearchForm(forms.Form):
+    all_objects = models.Sensor.objects.all()
+    merk_choices = [
+        ('', '-------'),
+    ]
+    try:
+    	for object in all_objects:
+            if (object.merk, object.merk) in merk_choices:
+                continue
+            else:
+            	merk_choices.append((object.merk, object.merk))
+    except OperationalError:
+    	pass
+
+    merk = forms.ChoiceField(choices=merk_choices, label='Brand')
+    search = forms.CharField(max_length=100, label='Search')
+
+
+class SolarCCSearchForm(forms.Form):
+    all_objects = models.SolarCC.objects.all()
+    merk_choices = [
+        ('', '-------'),
+    ]
+    try:
+    	for object in all_objects:
+            if (object.merk, object.merk) in merk_choices:
+                continue
+            else:
+            	merk_choices.append((object.merk, object.merk))
+    except OperationalError:
+    	pass
+
+    merk = forms.ChoiceField(choices=merk_choices, label='Brand')
+    search = forms.CharField(max_length=100, label='Search')
+
+
+class PVModuleSearchForm(forms.Form):
+    all_objects = models.PVModule.objects.all()
+    merk_choices = [
+        ('', '-------'),
+    ]
+    kw_value_choices = [
+        ('', '-------'),
+    ]
+    try:
+    	for object in all_objects:
+            if (object.merk, object.merk) in merk_choices:
+                pass
+            else:
+            	merk_choices.append((object.merk, object.merk))
+
+            if (object.kw_value, str(object.kw_value) + ' Wp') in kw_value_choices:
+                continue
+            else:
+            	kw_value_choices.append((object.kw_value, str(object.kw_value) + ' Wp'))
+    except OperationalError:
+    	pass
+
+    merk = forms.ChoiceField(choices=merk_choices, label='Brand')
+    kw_value = forms.ChoiceField(choices=kw_value_choices, label='Module Capacity')
+    search = forms.CharField(max_length=100, label='Search')
+
+
+class BatterySearchForm(forms.Form):
+    all_objects = models.Battery.objects.all()
+    merk_choices = [
+        ('', '-------'),
+    ]
+    tipe_choices = [
+        ('', '-------'),
+    ]
+    v_per_cell_choices = [
+        ('', '-------'),
+    ]
+    try:
+    	for object in all_objects:
+            if (object.merk, object.merk) in merk_choices:
+                pass
+            else:
+            	merk_choices.append((object.merk, object.merk))
+
+            if (object.tipe, object.tipe) in tipe_choices:
+                pass
+            else:
+            	tipe_choices.append((object.tipe, object.tipe))
+
+            if (object.v_per_cell, str(object.v_per_cell) + ' V') in v_per_cell_choices:
+                continue
+            else:
+            	v_per_cell_choices.append((object.v_per_cell, str(object.v_per_cell) + ' V'))
+    except OperationalError:
+    	pass
+
+    merk = forms.ChoiceField(choices=merk_choices, label='Brand')
+    v_per_cell = forms.ChoiceField(choices=v_per_cell_choices, label='Cell Voltage')
+    tipe = forms.ChoiceField(choices=tipe_choices, label='Battery Type')
+    search = forms.CharField(max_length=100, label='Search')
+
+
+class LVPanelSearchForm(forms.Form):
+    all_objects = models.LVPanel.objects.all()
+    merk_choices = [
+        ('', '-------'),
+    ]
+    try:
+    	for object in all_objects:
+            if (object.merk, object.merk) in merk_choices:
+                continue
+            else:
+            	merk_choices.append((object.merk, object.merk))
+    except OperationalError:
+    	pass
+
+    merk = forms.ChoiceField(choices=merk_choices, label='Brand')
+    search = forms.CharField(max_length=100, label='Search')
+
+
+class MVPanelSearchForm(forms.Form):
+    all_objects = models.MVPanel.objects.all()
+    merk_choices = [
+        ('', '-------'),
+    ]
+    try:
+    	for object in all_objects:
+            if (object.merk, object.merk) in merk_choices:
+                continue
+            else:
+            	merk_choices.append((object.merk, object.merk))
+    except OperationalError:
+    	pass
+
+    merk = forms.ChoiceField(choices=merk_choices, label='Brand')
+    search = forms.CharField(max_length=100, label='Search')
+
+
+class TrafoSearchForm(forms.Form):
+    all_objects = models.Trafo.objects.all()
+    merk_choices = [
+        ('', '-------'),
+    ]
+    year_choices = [
+        ('', '-------'),
+    ]
+    kva_choices = [
+        ('', '-------'),
+    ]
+    try:
+    	for object in all_objects:
+            if (object.merk, object.merk) in merk_choices:
+                pass
+            else:
+            	merk_choices.append((object.merk, object.merk))
+
+            if (object.year, object.year) in year_choices:
+                pass
+            else:
+            	year_choices.append((object.year, object.year))
+
+            if (object.kva_value, str(object.kva_value) + ' KVA') in kva_choices:
+                continue
+            else:
+            	kva_choices.append((object.kva_value, str(object.kva_value) + ' KVA'))
+    except OperationalError:
+    	pass
+
+    merk = forms.ChoiceField(choices=merk_choices, label='Brand')
+    year = forms.ChoiceField(choices=year_choices, label='Year')
+    kva_value = forms.ChoiceField(choices=kva_choices, label='Trafo Capacity')
+    search = forms.CharField(max_length=100, label='Search')
+
+
+class AIOSearchForm(forms.Form):
+    all_objects = models.AllInOne.objects.all()
+    merk_choices = [
+        ('', '-------'),
+    ]
+    kva_choices = [
+        ('', '-------'),
+    ]
+    try:
+    	for object in all_objects:
+            if (object.merk, object.merk) in merk_choices:
+                pass
+            else:
+            	merk_choices.append((object.merk, object.merk))
+
+            if (object.kva, str(object.kva) + ' KVA') in kva_choices:
+                continue
+            else:
+            	kva_choices.append((object.kva, str(object.kva) + ' KVA'))
+    except OperationalError:
+    	pass
+
+    PHASE_CHOISES = [
+        ('', '-------'),
+        ('Single Phase', "Single Phase"),
+        ('Triple Phase', "Triple Phase"),
+    ]
+
+    merk = forms.ChoiceField(choices=merk_choices, label='Brand')
+    phase = forms.ChoiceField(choices=PHASE_CHOISES, label='AIO Phases')
+    kva_value = forms.ChoiceField(choices=kva_choices, label='AIO Capacity')
+    search = forms.CharField(max_length=100, label='Search')
+
+
+class MountingSearchForm(forms.Form):
+    all_objects = models.Mounting.objects.all()
+    merk_choices = [
+        ('', '-------'),
+    ]
+    kw_value_choices = [
+        ('', '-------'),
+    ]
+    try:
+    	for object in all_objects:
+            if (object.merk, object.merk) in merk_choices:
+                pass
+            else:
+            	merk_choices.append((object.merk, object.merk))
+
+            if (object.kw_value, str(object.kw_value) + ' Wp') in kw_value_choices:
+                continue
+            else:
+            	kw_value_choices.append((object.kw_value, str(object.kw_value) + ' Wp'))
+    except OperationalError:
+    	pass
+
+    merk = forms.ChoiceField(choices=merk_choices, label='Brand')
+    kw_value = forms.ChoiceField(choices=kw_value_choices, label='Module Capacity')
     search = forms.CharField(max_length=100, label='Search')

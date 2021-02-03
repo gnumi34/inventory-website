@@ -110,7 +110,7 @@ def input_solarcc(request):
             return redirect('solarcc')
     else:
         form = SCCForm()
-    return render(request, 'input_inverter.html', {'form': form})
+    return render(request, 'input_scc.html', {'form': form})
 
 @login_required
 def input_pv_module(request):
@@ -216,7 +216,7 @@ def input_mounting(request):
             return redirect('mounting')
     else:
         form = MountingForm()
-    return render(request, 'input_mv_panel.html', {'form': form})
+    return render(request, 'input_mounting.html', {'form': form})
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -234,7 +234,7 @@ class InverterListView(ListView):
             if search_query.isnumeric():
                 queryset = self.model.objects.filter(
                     (Q(merk__icontains=search_query) | Q(aplikasi__icontains=search_query)
-                    & Q(tipe__icontains=search_query) | Q(jenis__icontains=search_query) |
+                    | Q(tipe__icontains=search_query) | Q(jenis__icontains=search_query) |
                     Q(kva=float(search_query))) & Q(merk__icontains=merk_query) & 
                     Q(aplikasi__icontains=application_query) & Q(phase__icontains=phase_query)
                 )
@@ -304,46 +304,439 @@ class InverterHistory(ListView):
         return queryset
 
 
-@login_required
-def review_monitoring(request):
-    return render(request, 'review_monitoring.html')
+@method_decorator(decorator=login_required, name='dispatch')
+class MonitoringListView(ListView):
+    model = Monitoring
+    context_object_name = 'objects'
+    template_name = "review_monitoring.html"
 
-@login_required
-def review_weather_station(request):
-    return render(request, 'review_wss.html')
+    def get_queryset(self):
+        merk_query = self.request.GET.get('merk')
+        search_query = self.request.GET.get('search')
+        if search_query or merk_query:
+            queryset = self.model.objects.filter(
+                (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+            )
+            return queryset
+        else:
+            queryset = self.model.objects.all()
+            return queryset
 
-@login_required
-def review_sensor(request):
-    return render(request, 'review_sensor.html')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = MonitoringSearchForm(initial={
+            'merk': self.request.GET.get('merk', ''),
+            'search': self.request.GET.get('search', '')
+        })
+        return context
 
-@login_required
-def review_solarcc(request):
-    return render(request, 'review_solarcc.html')
 
-@login_required
-def review_pv_module(request):
-    return render(request, 'review_pv_module.html')
+@method_decorator(decorator=login_required, name='dispatch')
+class WeatherStationListView(ListView):
+    model = WeatherStation
+    context_object_name = 'objects'
+    template_name = "review_weather.html"
 
-@login_required
-def review_battery(request):
-    return render(request, 'review_battery.html')
+    def get_queryset(self):
+        merk_query = self.request.GET.get('merk')
+        search_query = self.request.GET.get('search')
+        if search_query or merk_query:
+            queryset = self.model.objects.filter(
+                (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+            )
+            return queryset
+        else:
+            queryset = self.model.objects.all()
+            return queryset
 
-@login_required
-def review_lv_panel(request):
-    return render(request, 'review_lv_panel.html')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = WSSearchForm(initial={
+            'merk': self.request.GET.get('merk', ''),
+            'search': self.request.GET.get('search', '')
+        })
+        return context
 
-@login_required
-def review_mv_panel(request):
-    return render(request, 'review_mv_panel.html')
+@method_decorator(decorator=login_required, name='dispatch')
+class SensorListView(ListView):
+    model = Sensor
+    context_object_name = 'objects'
+    template_name = "review_sensor.html"
 
-@login_required
-def review_trafo(request):
-    return render(request, 'review_trafo.html')
+    def get_queryset(self):
+        merk_query = self.request.GET.get('merk')
+        search_query = self.request.GET.get('search')
+        if search_query or merk_query:
+            queryset = self.model.objects.filter(
+                (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+            )
+            return queryset
+        else:
+            queryset = self.model.objects.all()
+            return queryset
 
-@login_required
-def review_aio(request):
-    return render(request, 'review_aio.html')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = SensorSearchForm(initial={
+            'merk': self.request.GET.get('merk', ''),
+            'search': self.request.GET.get('search', '')
+        })
+        return context
 
-@login_required
-def review_mounting(request):
-    return render(request, 'review_mounting.html')
+
+@method_decorator(decorator=login_required, name='dispatch')
+class SolarCCListView(ListView):
+    model = SolarCC
+    context_object_name = 'objects'
+    template_name = "review_solarcc.html"
+
+    def get_queryset(self):
+        merk_query = self.request.GET.get('merk')
+        search_query = self.request.GET.get('search')
+        if search_query or merk_query:
+            queryset = self.model.objects.filter(
+                (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+            )
+            return queryset
+        else:
+            queryset = self.model.objects.all()
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = SolarCCSearchForm(initial={
+            'merk': self.request.GET.get('merk', ''),
+            'search': self.request.GET.get('search', '')
+        })
+        return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class PVModuleListView(ListView):
+    model = PVModule
+    context_object_name = 'objects'
+    template_name = "review_pv_module.html"
+
+    def get_queryset(self):
+        merk_query = self.request.GET.get('merk')
+        search_query = self.request.GET.get('search')
+        kw_value_query = self.request.GET.get('kw_value')
+        if search_query or merk_query or kw_value_query:
+            if search_query.isnumeric():
+                if kw_value_query == '':
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(kw_value=float(search_query))) 
+                        & Q(merk__icontains=merk_query) & Q(kw_value=float(kw_value_query))
+                    )
+                else:
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(kw_value=float(search_query))) 
+                        & Q(merk__icontains=merk_query)
+                    )
+            else:
+                if kw_value_query == '':
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                    )
+                else:
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        & Q(kw_value=float(kw_value_query))
+                    )
+            return queryset
+        else:
+            queryset = self.model.objects.all()
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = PVModuleSearchForm(initial={
+            'merk': self.request.GET.get('merk', ''),
+            'kw_value': self.request.GET.get('kw_value', ''),
+            'search': self.request.GET.get('search', '')
+        })
+        return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class BatteryListView(ListView):
+    model = Battery
+    context_object_name = 'objects'
+    template_name = "review_battery.html"
+
+    def get_queryset(self):
+        merk_query = self.request.GET.get('merk')
+        search_query = self.request.GET.get('search')
+        v_per_cell_query = self.request.GET.get('v_per_cell')
+        tipe_query = self.request.GET.get('tipe')
+        if search_query or merk_query or v_per_cell_query or tipe_query:
+            if search_query.isnumeric():
+                if v_per_cell_query == '':
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(keterangan__icontains=search_query)
+                        | Q(capacity=float(search_query))) & Q(merk__icontains=merk_query)
+                        & Q(tipe__icontains=tipe_query)
+                    )
+                else:
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(keterangan__icontains=search_query)
+                        | Q(capacity=float(search_query))) & Q(merk__icontains=merk_query)
+                        & Q(v_per_cell=float(v_per_cell_query)) & Q(tipe__icontains=tipe_query)
+                    )
+            else:
+                if v_per_cell_query == '':
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(keterangan__icontains=search_query)) 
+                        & Q(merk__icontains=merk_query) & Q(tipe__icontains=tipe_query)
+                    )
+                else:
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(keterangan__icontains=search_query)) 
+                        & Q(merk__icontains=merk_query) & Q(v_per_cell=float(v_per_cell_query)) 
+                        & Q(tipe__icontains=tipe_query)
+                    )
+            return queryset
+        else:
+            queryset = self.model.objects.all()
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = BatterySearchForm(initial={
+            'merk': self.request.GET.get('merk', ''),
+            'v_per_cell': self.request.GET.get('v_per_cell', ''),
+            'tipe': self.request.GET.get('tipe', ''),
+            'search': self.request.GET.get('search', '')
+        })
+        return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class LVPanelListView(ListView):
+    model = LVPanel
+    context_object_name = 'objects'
+    template_name = "review_lv_panel.html"
+
+    def get_queryset(self):
+        merk_query = self.request.GET.get('merk')
+        search_query = self.request.GET.get('search')
+        if search_query or merk_query:
+            queryset = self.model.objects.filter(
+                (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+            )
+            return queryset
+        else:
+            queryset = self.model.objects.all()
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = LVPanelSearchForm(initial={
+            'merk': self.request.GET.get('merk', ''),
+            'search': self.request.GET.get('search', '')
+        })
+        return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class MVPanelListView(ListView):
+    model = MVPanel
+    context_object_name = 'objects'
+    template_name = "review_mv_panel.html"
+
+    def get_queryset(self):
+        merk_query = self.request.GET.get('merk')
+        search_query = self.request.GET.get('search')
+        if search_query or merk_query:
+            queryset = self.model.objects.filter(
+                (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+            )
+            return queryset
+        else:
+            queryset = self.model.objects.all()
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = MVPanelSearchForm(initial={
+            'merk': self.request.GET.get('merk', ''),
+            'search': self.request.GET.get('search', '')
+        })
+        return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class TrafoListView(ListView):
+    model = Trafo
+    context_object_name = 'objects'
+    template_name = "review_trafo.html"
+
+    def get_queryset(self):
+        merk_query = self.request.GET.get('merk')
+        search_query = self.request.GET.get('search')
+        year_query = self.request.GET.get('year')
+        kva_value_query = self.request.GET.get('kva_value')
+        if search_query or merk_query or year_query or kva_value_query:
+            if search_query.isnumeric():
+                if kva_value_query == '':
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(kva_value=float(search_query)))
+                        & Q(merk__icontains=merk_query) & Q(year__icontains=year_query)
+                    )
+                else:
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(kva_value=float(search_query))) 
+                        & Q(merk__icontains=merk_query) & Q(year__icontains=year_query) 
+                        & Q(kva_value=float(kva_value_query))
+                    )
+            else:
+                if kva_value_query == '':
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        & Q(year__icontains=year_query)
+                    )
+                else:
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        & Q(year__icontains=year_query) & Q(kva_value=float(kva_value_query))
+                    )
+            return queryset
+        else:
+            queryset = self.model.objects.all()
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = TrafoSearchForm(initial={
+            'merk': self.request.GET.get('merk', ''),
+            'kva_value': self.request.GET.get('kva_value', ''),
+            'year': self.request.GET.get('year', ''),
+            'search': self.request.GET.get('search', '')
+        })
+        return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class AIOListView(ListView):
+    model = AllInOne
+    context_object_name = 'objects'
+    template_name = "review_aio.html"
+
+    def get_queryset(self):
+        merk_query = self.request.GET.get('merk')
+        phase_query = self.request.GET.get('phase')
+        kva_value_query = self.request.GET.get('kva_value')
+        search_query = self.request.GET.get('search')
+        if search_query or merk_query or phase_query or kva_value_query:
+            if search_query.isnumeric():
+                if kva_value_query == '':
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(kva=float(search_query))
+                        | Q(phase__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        & Q(phase__icontains=phase_query)
+                    )
+                else:
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(kva=float(search_query))
+                        | Q(phase__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        & Q(phase__icontains=phase_query) & Q(kva_value=float(kva_value_query))
+                    )
+            else:
+                if kva_value_query == '':
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(phase__icontains=search_query)) 
+                        & Q(merk__icontains=merk_query) & Q(phase__icontains=phase_query) 
+                    )
+                else:
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(phase__icontains=search_query)) 
+                        & Q(merk__icontains=merk_query) & Q(phase__icontains=phase_query)
+                        & Q(kva=float(kva_value_query))
+                    )
+            return queryset
+        else:
+            queryset = self.model.objects.all()
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = AIOSearchForm(initial={
+            'merk': self.request.GET.get('merk', ''),
+            'kva_value': self.request.GET.get('kva_value', ''),
+            'phase': self.request.GET.get('phase', ''),
+            'search': self.request.GET.get('search', '')
+        })
+        return context
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class MountingListView(ListView):
+    model = Mounting
+    context_object_name = 'objects'
+    template_name = "review_mounting.html"
+
+    def get_queryset(self):
+        merk_query = self.request.GET.get('merk')
+        search_query = self.request.GET.get('search')
+        kw_value_query = self.request.GET.get('kw_value')
+        if search_query or merk_query or kw_value_query:
+            if search_query.isnumeric():
+                if kw_value_query == '':
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(kw_value=float(search_query))) 
+                        & Q(merk__icontains=merk_query)
+                    )
+                else:
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query) | Q(kw_value=float(search_query))) 
+                        & Q(merk__icontains=merk_query) & Q(kw_value=float(kw_value_query))
+                    )
+            else:
+                if kw_value_query == '':
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                    )
+                else:
+                    queryset = self.model.objects.filter(
+                        (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        & Q(kw_value=float(kw_value_query))
+                    )
+            return queryset
+        else:
+            queryset = self.model.objects.all()
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = MountingSearchForm(initial={
+            'merk': self.request.GET.get('merk', ''),
+            'kw_value': self.request.GET.get('kw_value', ''),
+            'search': self.request.GET.get('search', '')
+        })
+        return context
