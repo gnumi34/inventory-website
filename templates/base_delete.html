@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block title %}Delete {{ object.merk }} {% if object.jenis %}{{ object.tipe }} {{ object.jenis }} {% else %}{{ object.item }} {% endif %}{% endblock  %}
+
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
     <li class="breadcrumb-item"><a href="{% url 'review' %}">Review</a></li>

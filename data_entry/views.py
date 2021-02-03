@@ -351,6 +351,18 @@ class MonitoringEdit(UpdateView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
+class MonitoringDelete(DeleteView):
+    model = Monitoring
+    template_name = 'delete_monitoring.html'
+    success_url = reverse_lazy('review_monitoring')
+    success_message = "Item Deleted Successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(MonitoringDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
 class WeatherStationListView(ListView):
     model = WeatherStation
     context_object_name = 'objects'
@@ -396,6 +408,18 @@ class WeatherStationEdit(UpdateView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
+class WeatherStationDelete(DeleteView):
+    model = WeatherStation
+    template_name = 'delete_weather.html'
+    success_url = reverse_lazy('review_weather_station')
+    success_message = "Item Deleted Successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(WeatherStationDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
 class SensorListView(ListView):
     model = Sensor
     context_object_name = 'objects'
@@ -438,6 +462,18 @@ class SensorEdit(UpdateView):
         sensor.updated_by = self.request.user
         sensor.save()
         return redirect('review_sensor')
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class SensorDelete(DeleteView):
+    model = Sensor
+    template_name = 'delete_sensor.html'
+    success_url = reverse_lazy('review_sensor')
+    success_message = "Item Deleted Successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(SensorDelete, self).delete(request, *args, **kwargs)
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -487,6 +523,18 @@ class SolarCCEdit(UpdateView):
             scc.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * scc.value, 2)
         scc.save()
         return redirect('review_solarcc')
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class SolarCCDelete(DeleteView):
+    model = SolarCC
+    template_name = 'delete_solarcc.html'
+    success_url = reverse_lazy('review_solarcc')
+    success_message = "Item Deleted Successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(SolarCCDelete, self).delete(request, *args, **kwargs)
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -555,6 +603,18 @@ class PVModuleEdit(UpdateView):
         pv_module.updated_by = self.request.user
         pv_module.save()
         return redirect('review_pv_module')
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class PVModuleDelete(DeleteView):
+    model = PVModule
+    template_name = 'delete_pv_module.html'
+    success_url = reverse_lazy('review_pv_module')
+    success_message = "Item Deleted Successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(PVModuleDelete, self).delete(request, *args, **kwargs)
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -636,6 +696,18 @@ class BatteryEdit(UpdateView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
+class BatteryDelete(DeleteView):
+    model = Battery
+    template_name = 'delete_battery.html'
+    success_url = reverse_lazy('review_battery')
+    success_message = "Item Deleted Successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(BatteryDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
 class LVPanelListView(ListView):
     model = LVPanel
     context_object_name = 'objects'
@@ -681,6 +753,18 @@ class LVPanelEdit(UpdateView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
+class LVPanelDelete(DeleteView):
+    model = LVPanel
+    template_name = 'delete_lv_panel.html'
+    success_url = reverse_lazy('review_lv_panel')
+    success_message = "Item Deleted Successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(LVPanelDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
 class MVPanelListView(ListView):
     model = MVPanel
     context_object_name = 'objects'
@@ -723,6 +807,18 @@ class MVPanelEdit(UpdateView):
         mv_panel.updated_by = self.request.user
         mv_panel.save()
         return redirect('review_mv_panel')
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class MVPanelDelete(DeleteView):
+    model = Inverter
+    template_name = 'delete_mv_panel.html'
+    success_url = reverse_lazy('review_mv_panel')
+    success_message = "Item Deleted Successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(MVPanelDelete, self).delete(request, *args, **kwargs)
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -795,6 +891,18 @@ class TrafoEdit(UpdateView):
         trafo.updated_by = self.request.user
         trafo.save()
         return redirect('review_trafo')
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class TrafoDelete(DeleteView):
+    model = Trafo
+    template_name = 'delete_trafo.html'
+    success_url = reverse_lazy('review_trafo')
+    success_message = "Item Deleted Successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(TrafoDelete, self).delete(request, *args, **kwargs)
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -876,6 +984,18 @@ class AIOEdit(UpdateView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
+class AIODelete(DeleteView):
+    model = AllInOne
+    template_name = 'delete_aio.html'
+    success_url = reverse_lazy('review_aio')
+    success_message = "Item Deleted Successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(AIODelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
 class MountingListView(ListView):
     model = Mounting
     context_object_name = 'objects'
@@ -941,3 +1061,16 @@ class MountingEdit(UpdateView):
         mounting.updated_by = self.request.user
         mounting.save()
         return redirect('review_mounting')
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class MountingDelete(DeleteView):
+    model = Mounting
+    template_name = 'delete_mounting.html'
+    success_url = reverse_lazy('review_mounting')
+    success_message = "Item Deleted Successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(MountingDelete, self).delete(request, *args, **kwargs)
+
