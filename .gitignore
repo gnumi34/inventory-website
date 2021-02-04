@@ -136,8 +136,5 @@ dmypy.json
 # Visual Studio Code Config Files
 .vscode/
 
-# Django Migration Files
-*/migrations/
-
 # Other files
 *.zip
