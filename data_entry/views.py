@@ -272,7 +272,7 @@ class InverterEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         inverter = form.save(commit=False)
-        inverter.updated_at = timezone.now()
+        inverter.updated_at = timezone.localtime(timezone.now())
         inverter.updated_by = self.request.user
         if inverter.kurs == '$':
             inverter.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * inverter.value, 2)
@@ -297,7 +297,7 @@ class InverterDelete(DeleteView):
 @method_decorator(decorator=login_required, name='dispatch')
 class InverterHistory(ListView):
     model = Inverter
-    context_object_name = 'inverter'
+    context_object_name = 'object'
     template_name = "history_inverter.html"
 
     def get_queryset(self):
@@ -344,7 +344,7 @@ class MonitoringEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         monitoring = form.save(commit=False)
-        monitoring.updated_at = timezone.now()
+        monitoring.updated_at = timezone.localtime(timezone.now())
         monitoring.updated_by = self.request.user
         monitoring.save()
         return redirect('review_monitoring')
@@ -360,6 +360,17 @@ class MonitoringDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super(MonitoringDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class MonitoringHistory(ListView):
+    model = Monitoring
+    context_object_name = 'object'
+    template_name = "history_monitoring.html"
+
+    def get_queryset(self):
+        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
+        return queryset
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -401,7 +412,7 @@ class WeatherStationEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         wss = form.save(commit=False)
-        wss.updated_at = timezone.now()
+        wss.updated_at = timezone.localtime(timezone.now())
         wss.updated_by = self.request.user
         wss.save()
         return redirect('review_weather_station')
@@ -417,6 +428,17 @@ class WeatherStationDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super(WeatherStationDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class WeatherStationHistory(ListView):
+    model = WeatherStation
+    context_object_name = 'object'
+    template_name = "history_weather.html"
+
+    def get_queryset(self):
+        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
+        return queryset
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -458,7 +480,7 @@ class SensorEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         sensor = form.save(commit=False)
-        sensor.updated_at = timezone.now()
+        sensor.updated_at = timezone.localtime(timezone.now())
         sensor.updated_by = self.request.user
         sensor.save()
         return redirect('review_sensor')
@@ -474,6 +496,17 @@ class SensorDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super(SensorDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class SensorHistory(ListView):
+    model = Sensor
+    context_object_name = 'object'
+    template_name = "history_sensor.html"
+
+    def get_queryset(self):
+        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
+        return queryset
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -515,7 +548,7 @@ class SolarCCEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         scc = form.save(commit=False)
-        scc.updated_at = timezone.now()
+        scc.updated_at = timezone.localtime(timezone.now())
         scc.updated_by = self.request.user
         if scc.kurs == '$':
             scc.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * scc.value, 2)
@@ -535,6 +568,17 @@ class SolarCCDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super(SolarCCDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class SolarCCHistory(ListView):
+    model = SolarCC
+    context_object_name = 'object'
+    template_name = "history_solarcc.html"
+
+    def get_queryset(self):
+        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
+        return queryset
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -599,7 +643,7 @@ class PVModuleEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         pv_module = form.save(commit=False)
-        pv_module.updated_at = timezone.now()
+        pv_module.updated_at = timezone.localtime(timezone.now())
         pv_module.updated_by = self.request.user
         pv_module.save()
         return redirect('review_pv_module')
@@ -615,6 +659,17 @@ class PVModuleDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super(PVModuleDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class PVModuleHistory(ListView):
+    model = PVModule
+    context_object_name = 'object'
+    template_name = "history_pv_module.html"
+
+    def get_queryset(self):
+        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
+        return queryset
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -685,7 +740,7 @@ class BatteryEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         battery = form.save(commit=False)
-        battery.updated_at = timezone.now()
+        battery.updated_at = timezone.localtime(timezone.now())
         battery.updated_by = self.request.user
         if battery.kurs == '$':
             battery.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * battery.value, 2)
@@ -705,6 +760,17 @@ class BatteryDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super(BatteryDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class BatteryHistory(ListView):
+    model = Battery
+    context_object_name = 'object'
+    template_name = "history_battery.html"
+
+    def get_queryset(self):
+        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
+        return queryset
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -746,7 +812,7 @@ class LVPanelEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         lv_panel = form.save(commit=False)
-        lv_panel.updated_at = timezone.now()
+        lv_panel.updated_at = timezone.localtime(timezone.now())
         lv_panel.updated_by = self.request.user
         lv_panel.save()
         return redirect('review_lv_panel')
@@ -762,6 +828,17 @@ class LVPanelDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super(LVPanelDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class LVPanelHistory(ListView):
+    model = LVPanel
+    context_object_name = 'object'
+    template_name = "history_lv_panel.html"
+
+    def get_queryset(self):
+        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
+        return queryset
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -803,7 +880,7 @@ class MVPanelEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         mv_panel = form.save(commit=False)
-        mv_panel.updated_at = timezone.now()
+        mv_panel.updated_at = timezone.localtime(timezone.now())
         mv_panel.updated_by = self.request.user
         mv_panel.save()
         return redirect('review_mv_panel')
@@ -819,6 +896,17 @@ class MVPanelDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super(MVPanelDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class MVPanelHistory(ListView):
+    model = MVPanel
+    context_object_name = 'object'
+    template_name = "history_mv_panel.html"
+
+    def get_queryset(self):
+        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
+        return queryset
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -887,7 +975,7 @@ class TrafoEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         trafo = form.save(commit=False)
-        trafo.updated_at = timezone.now()
+        trafo.updated_at = timezone.localtime(timezone.now())
         trafo.updated_by = self.request.user
         trafo.save()
         return redirect('review_trafo')
@@ -903,6 +991,17 @@ class TrafoDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super(TrafoDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class TrafoHistory(ListView):
+    model = Trafo
+    context_object_name = 'object'
+    template_name = "history_trafo.html"
+
+    def get_queryset(self):
+        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
+        return queryset
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -973,7 +1072,7 @@ class AIOEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         aio = form.save(commit=False)
-        aio.updated_at = timezone.now()
+        aio.updated_at = timezone.localtime(timezone.now())
         aio.updated_by = self.request.user
         if aio.kurs == '$':
             aio.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * aio.value, 2)
@@ -993,6 +1092,17 @@ class AIODelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super(AIODelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class AIOHistory(ListView):
+    model = AllInOne
+    context_object_name = 'object'
+    template_name = "history_aio.html"
+
+    def get_queryset(self):
+        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
+        return queryset
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -1057,7 +1167,7 @@ class MountingEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         mounting = form.save(commit=False)
-        mounting.updated_at = timezone.now()
+        mounting.updated_at = timezone.localtime(timezone.now())
         mounting.updated_by = self.request.user
         mounting.save()
         return redirect('review_mounting')
@@ -1073,4 +1183,15 @@ class MountingDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super(MountingDelete, self).delete(request, *args, **kwargs)
+
+
+@method_decorator(decorator=login_required, name='dispatch')
+class MountingHistory(ListView):
+    model = Mounting
+    context_object_name = 'object'
+    template_name = "history_mounting.html"
+
+    def get_queryset(self):
+        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
+        return queryset
 
