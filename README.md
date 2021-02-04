@@ -6,12 +6,8 @@ Currently supports items entry based on category only.
 
 Planned features:
 
-1. Inventory list view.
-2. Search items based on item's name.
-3. Sort view based on columns.
-4. List items with only specified features.
-5. Edit items.
-6. Delete items.
+1. Sort view based on columns.
+2. Complete item revision history
 
 ## Requirements
 
