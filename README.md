@@ -6,7 +6,7 @@ Currently supports items entry based on category only.
 
 Planned features:
 
-1. Update search form every item entry
+1. Update search form choices every item entry.
 2. Sort view based on columns.
 3. Complete item revision history.
 4. Stricter user authentication and permissions.
