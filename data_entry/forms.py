@@ -1,5 +1,5 @@
 from django import forms
-from django.db.utils import OperationalError
+from django.db.utils import OperationalError, ProgrammingError
 from . import models
 
 class InverterForm(forms.ModelForm):
@@ -222,7 +222,7 @@ class InverterSearchForm(forms.Form):
                 continue
             else:
             	merk_choices.append((object.merk, object.merk))
-    except OperationalError:
+    except ProgrammingError:
     	pass
 
     PHASE_CHOISES = [
@@ -254,7 +254,7 @@ class MonitoringSearchForm(forms.Form):
                 continue
             else:
             	merk_choices.append((object.merk, object.merk))
-    except OperationalError:
+    except ProgrammingError:
     	pass
 
     merk = forms.ChoiceField(choices=merk_choices, label='Brand')
@@ -272,7 +272,7 @@ class WSSearchForm(forms.Form):
                 continue
             else:
             	merk_choices.append((object.merk, object.merk))
-    except OperationalError:
+    except ProgrammingError:
     	pass
 
     merk = forms.ChoiceField(choices=merk_choices, label='Brand')
@@ -290,7 +290,7 @@ class SensorSearchForm(forms.Form):
                 continue
             else:
             	merk_choices.append((object.merk, object.merk))
-    except OperationalError:
+    except ProgrammingError:
     	pass
 
     merk = forms.ChoiceField(choices=merk_choices, label='Brand')
@@ -308,7 +308,7 @@ class SolarCCSearchForm(forms.Form):
                 continue
             else:
             	merk_choices.append((object.merk, object.merk))
-    except OperationalError:
+    except ProgrammingError:
     	pass
 
     merk = forms.ChoiceField(choices=merk_choices, label='Brand')
@@ -334,7 +334,7 @@ class PVModuleSearchForm(forms.Form):
                 continue
             else:
             	kw_value_choices.append((object.kw_value, str(object.kw_value) + ' Wp'))
-    except OperationalError:
+    except ProgrammingError:
     	pass
 
     merk = forms.ChoiceField(choices=merk_choices, label='Brand')
@@ -369,7 +369,7 @@ class BatterySearchForm(forms.Form):
                 continue
             else:
             	v_per_cell_choices.append((object.v_per_cell, str(object.v_per_cell) + ' V'))
-    except OperationalError:
+    except ProgrammingError:
     	pass
 
     merk = forms.ChoiceField(choices=merk_choices, label='Brand')
@@ -389,7 +389,7 @@ class LVPanelSearchForm(forms.Form):
                 continue
             else:
             	merk_choices.append((object.merk, object.merk))
-    except OperationalError:
+    except ProgrammingError:
     	pass
 
     merk = forms.ChoiceField(choices=merk_choices, label='Brand')
@@ -407,7 +407,7 @@ class MVPanelSearchForm(forms.Form):
                 continue
             else:
             	merk_choices.append((object.merk, object.merk))
-    except OperationalError:
+    except ProgrammingError:
     	pass
 
     merk = forms.ChoiceField(choices=merk_choices, label='Brand')
@@ -441,7 +441,7 @@ class TrafoSearchForm(forms.Form):
                 continue
             else:
             	kva_choices.append((object.kva_value, str(object.kva_value) + ' KVA'))
-    except OperationalError:
+    except ProgrammingError:
     	pass
 
     merk = forms.ChoiceField(choices=merk_choices, label='Brand')
@@ -469,7 +469,7 @@ class AIOSearchForm(forms.Form):
                 continue
             else:
             	kva_choices.append((object.kva, str(object.kva) + ' KVA'))
-    except OperationalError:
+    except ProgrammingError:
     	pass
 
     PHASE_CHOISES = [
@@ -503,7 +503,7 @@ class MountingSearchForm(forms.Form):
                 continue
             else:
             	kw_value_choices.append((object.kw_value, str(object.kw_value) + ' Wp'))
-    except OperationalError:
+    except ProgrammingError:
     	pass
 
     merk = forms.ChoiceField(choices=merk_choices, label='Brand')
