@@ -6,8 +6,8 @@ Currently supports items entry based on category only.
 
 Planned features:
 
-1. Sort view based on columns.
-2. Complete item revision history.
+1. Update search form choices every item entry.
+2. Sort view based on columns.
 3. Stricter user authentication and permissions.
 4. Add email backend for password reset feature.
 

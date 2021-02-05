@@ -235,15 +235,15 @@ class InverterListView(ListView):
                 queryset = self.model.objects.filter(
                     (Q(merk__icontains=search_query) | Q(aplikasi__icontains=search_query)
                     | Q(tipe__icontains=search_query) | Q(jenis__icontains=search_query) |
-                    Q(kva=float(search_query))) & Q(merk__icontains=merk_query) & 
-                    Q(aplikasi__icontains=application_query) & Q(phase__icontains=phase_query)
+                    Q(kva=float(search_query))) & Q(merk__istartswith=merk_query) & 
+                    Q(aplikasi__istartswith=application_query) & Q(phase__istartswith=phase_query)
                 )
             else:
                 queryset = self.model.objects.filter(
                     (Q(merk__icontains=search_query) | Q(aplikasi__icontains=search_query)
                     | Q(tipe__icontains=search_query) | Q(jenis__icontains=search_query)) &
-                    Q(merk__icontains=merk_query) & Q(aplikasi__icontains=application_query)
-                    & Q(phase__icontains=phase_query)
+                    Q(merk__istartswith=merk_query) & Q(aplikasi__istartswith=application_query)
+                    & Q(phase__istartswith=phase_query)
                 )
             return queryset
         else:
@@ -272,13 +272,16 @@ class InverterEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         inverter = form.save(commit=False)
-        inverter.updated_at = timezone.localtime(timezone.now())
-        inverter.updated_by = self.request.user
         if inverter.kurs == '$':
             inverter.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * inverter.value, 2)
         else:
             inverter.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * inverter.value, 2)
         inverter.save()
+        history = InverterHistory(
+            updated_by = self.request.user,
+            object = inverter
+        )
+        history.save()
         return redirect('review_inverter')
     
 
@@ -295,14 +298,18 @@ class InverterDelete(DeleteView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
-class InverterHistory(ListView):
-    model = Inverter
-    context_object_name = 'object'
+class InverterHistoryView(ListView):
+    model = InverterHistory
+    context_object_name = 'histories'
     template_name = "history_inverter.html"
 
     def get_queryset(self):
-        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
-        return queryset
+        return self.model.objects.filter(object=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(InverterHistoryView, self).get_context_data(**kwargs)
+        context['object'] = Inverter.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -317,7 +324,7 @@ class MonitoringListView(ListView):
         if search_query or merk_query:
             queryset = self.model.objects.filter(
                 (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
             )
             return queryset
         else:
@@ -344,9 +351,12 @@ class MonitoringEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         monitoring = form.save(commit=False)
-        monitoring.updated_at = timezone.localtime(timezone.now())
-        monitoring.updated_by = self.request.user
         monitoring.save()
+        history = MonitoringHistory(
+            updated_by = self.request.user,
+            object = monitoring
+        )
+        history.save()
         return redirect('review_monitoring')
 
 
@@ -363,14 +373,18 @@ class MonitoringDelete(DeleteView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
-class MonitoringHistory(ListView):
-    model = Monitoring
-    context_object_name = 'object'
+class MonitoringHistoryView(ListView):
+    model = MonitoringHistory
+    context_object_name = 'histories'
     template_name = "history_monitoring.html"
 
     def get_queryset(self):
-        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
-        return queryset
+        return self.model.objects.filter(object=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(MonitoringHistoryView, self).get_context_data(**kwargs)
+        context['object'] = Monitoring.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -385,7 +399,7 @@ class WeatherStationListView(ListView):
         if search_query or merk_query:
             queryset = self.model.objects.filter(
                 (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
             )
             return queryset
         else:
@@ -412,9 +426,12 @@ class WeatherStationEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         wss = form.save(commit=False)
-        wss.updated_at = timezone.localtime(timezone.now())
-        wss.updated_by = self.request.user
         wss.save()
+        history = WeatherStationHistory(
+            updated_by = self.request.user,
+            object = wss
+        )
+        history.save()
         return redirect('review_weather_station')
 
 
@@ -431,14 +448,18 @@ class WeatherStationDelete(DeleteView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
-class WeatherStationHistory(ListView):
-    model = WeatherStation
-    context_object_name = 'object'
+class WeatherStationHistoryView(ListView):
+    model = WeatherStationHistory
+    context_object_name = 'histories'
     template_name = "history_weather.html"
 
     def get_queryset(self):
-        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
-        return queryset
+        return self.model.objects.filter(object=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(WeatherStationHistoryView, self).get_context_data(**kwargs)
+        context['object'] = WeatherStation.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -453,7 +474,7 @@ class SensorListView(ListView):
         if search_query or merk_query:
             queryset = self.model.objects.filter(
                 (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
             )
             return queryset
         else:
@@ -480,9 +501,12 @@ class SensorEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         sensor = form.save(commit=False)
-        sensor.updated_at = timezone.localtime(timezone.now())
-        sensor.updated_by = self.request.user
         sensor.save()
+        history = SensorHistory(
+            updated_by = self.request.user,
+            object = sensor
+        )
+        history.save()
         return redirect('review_sensor')
 
 
@@ -499,14 +523,18 @@ class SensorDelete(DeleteView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
-class SensorHistory(ListView):
-    model = Sensor
-    context_object_name = 'object'
+class SensorHistoryView(ListView):
+    model = SensorHistory
+    context_object_name = 'histories'
     template_name = "history_sensor.html"
 
     def get_queryset(self):
-        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
-        return queryset
+        return self.model.objects.filter(object=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(SensorHistoryView, self).get_context_data(**kwargs)
+        context['object'] = Sensor.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -521,7 +549,7 @@ class SolarCCListView(ListView):
         if search_query or merk_query:
             queryset = self.model.objects.filter(
                 (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
             )
             return queryset
         else:
@@ -548,13 +576,16 @@ class SolarCCEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         scc = form.save(commit=False)
-        scc.updated_at = timezone.localtime(timezone.now())
-        scc.updated_by = self.request.user
         if scc.kurs == '$':
             scc.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * scc.value, 2)
         else:
             scc.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * scc.value, 2)
         scc.save()
+        history = SolarCCHistory(
+            updated_by = self.request.user,
+            object = scc
+        )
+        history.save()
         return redirect('review_solarcc')
 
 
@@ -571,14 +602,18 @@ class SolarCCDelete(DeleteView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
-class SolarCCHistory(ListView):
-    model = SolarCC
-    context_object_name = 'object'
+class SolarCCHistoryView(ListView):
+    model = SolarCCHistory
+    context_object_name = 'histories'
     template_name = "history_solarcc.html"
 
     def get_queryset(self):
-        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
-        return queryset
+        return self.model.objects.filter(object=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(SolarCCHistoryView, self).get_context_data(**kwargs)
+        context['object'] = SolarCC.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -597,24 +632,24 @@ class PVModuleListView(ListView):
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kw_value=float(search_query))) 
-                        & Q(merk__icontains=merk_query) & Q(kw_value=float(kw_value_query))
+                        & Q(merk__istartswith=merk_query) & Q(kw_value=float(kw_value_query))
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kw_value=float(search_query))) 
-                        & Q(merk__icontains=merk_query)
+                        & Q(merk__istartswith=merk_query)
                     )
             else:
                 if kw_value_query == '':
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
                         & Q(kw_value=float(kw_value_query))
                     )
             return queryset
@@ -643,9 +678,12 @@ class PVModuleEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         pv_module = form.save(commit=False)
-        pv_module.updated_at = timezone.localtime(timezone.now())
-        pv_module.updated_by = self.request.user
         pv_module.save()
+        history = PVModuleHistory(
+            updated_by = self.request.user,
+            object = pv_module
+        )
+        history.save()
         return redirect('review_pv_module')
 
 
@@ -662,14 +700,18 @@ class PVModuleDelete(DeleteView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
-class PVModuleHistory(ListView):
-    model = PVModule
-    context_object_name = 'object'
+class PVModuleHistoryView(ListView):
+    model = PVModuleHistory
+    context_object_name = 'histories'
     template_name = "history_pv_module.html"
 
     def get_queryset(self):
-        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
-        return queryset
+        return self.model.objects.filter(object=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(PVModuleHistoryView, self).get_context_data(**kwargs)
+        context['object'] = PVModule.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -689,29 +731,29 @@ class BatteryListView(ListView):
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(keterangan__icontains=search_query)
-                        | Q(capacity=float(search_query))) & Q(merk__icontains=merk_query)
-                        & Q(tipe__icontains=tipe_query)
+                        | Q(capacity=float(search_query))) & Q(merk__istartswith=merk_query)
+                        & Q(tipe__istartswith=tipe_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(keterangan__icontains=search_query)
-                        | Q(capacity=float(search_query))) & Q(merk__icontains=merk_query)
-                        & Q(v_per_cell=float(v_per_cell_query)) & Q(tipe__icontains=tipe_query)
+                        | Q(capacity=float(search_query))) & Q(merk__istartswith=merk_query)
+                        & Q(v_per_cell=float(v_per_cell_query)) & Q(tipe__istartswith=tipe_query)
                     )
             else:
                 if v_per_cell_query == '':
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(keterangan__icontains=search_query)) 
-                        & Q(merk__icontains=merk_query) & Q(tipe__icontains=tipe_query)
+                        & Q(merk__istartswith=merk_query) & Q(tipe__istartswith=tipe_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(keterangan__icontains=search_query)) 
-                        & Q(merk__icontains=merk_query) & Q(v_per_cell=float(v_per_cell_query)) 
-                        & Q(tipe__icontains=tipe_query)
+                        & Q(merk__istartswith=merk_query) & Q(v_per_cell=float(v_per_cell_query)) 
+                        & Q(tipe__istartswith=tipe_query)
                     )
             return queryset
         else:
@@ -740,13 +782,16 @@ class BatteryEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         battery = form.save(commit=False)
-        battery.updated_at = timezone.localtime(timezone.now())
-        battery.updated_by = self.request.user
         if battery.kurs == '$':
             battery.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * battery.value, 2)
         else:
             battery.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * battery.value, 2)
         battery.save()
+        history = BatteryHistory(
+            updated_by = self.request.user,
+            object = battery
+        )
+        history.save()
         return redirect('review_battery')
 
 
@@ -763,14 +808,18 @@ class BatteryDelete(DeleteView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
-class BatteryHistory(ListView):
-    model = Battery
-    context_object_name = 'object'
+class BatteryHistoryView(ListView):
+    model = BatteryHistory
+    context_object_name = 'histories'
     template_name = "history_battery.html"
 
     def get_queryset(self):
-        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
-        return queryset
+        return self.model.objects.filter(object=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(BatteryHistoryView, self).get_context_data(**kwargs)
+        context['object'] = Battery.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -785,7 +834,7 @@ class LVPanelListView(ListView):
         if search_query or merk_query:
             queryset = self.model.objects.filter(
                 (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
             )
             return queryset
         else:
@@ -812,9 +861,12 @@ class LVPanelEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         lv_panel = form.save(commit=False)
-        lv_panel.updated_at = timezone.localtime(timezone.now())
-        lv_panel.updated_by = self.request.user
         lv_panel.save()
+        history = LVPanelHistory(
+            updated_by = self.request.user,
+            object = lv_panel
+        )
+        history.save()
         return redirect('review_lv_panel')
 
 
@@ -831,14 +883,18 @@ class LVPanelDelete(DeleteView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
-class LVPanelHistory(ListView):
-    model = LVPanel
-    context_object_name = 'object'
+class LVPanelHistoryView(ListView):
+    model = LVPanelHistory
+    context_object_name = 'histories'
     template_name = "history_lv_panel.html"
 
     def get_queryset(self):
-        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
-        return queryset
+        return self.model.objects.filter(object=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(LVPanelHistoryView, self).get_context_data(**kwargs)
+        context['object'] = LVPanel.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -853,7 +909,7 @@ class MVPanelListView(ListView):
         if search_query or merk_query:
             queryset = self.model.objects.filter(
                 (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
             )
             return queryset
         else:
@@ -880,9 +936,12 @@ class MVPanelEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         mv_panel = form.save(commit=False)
-        mv_panel.updated_at = timezone.localtime(timezone.now())
-        mv_panel.updated_by = self.request.user
         mv_panel.save()
+        history = MVPanelHistory(
+            updated_by = self.request.user,
+            object = mv_panel
+        )
+        history.save()
         return redirect('review_mv_panel')
 
 
@@ -899,14 +958,18 @@ class MVPanelDelete(DeleteView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
-class MVPanelHistory(ListView):
-    model = MVPanel
-    context_object_name = 'object'
+class MVPanelHistoryView(ListView):
+    model = MVPanelHistory
+    context_object_name = 'histories'
     template_name = "history_mv_panel.html"
 
     def get_queryset(self):
-        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
-        return queryset
+        return self.model.objects.filter(object=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(MVPanelHistoryView, self).get_context_data(**kwargs)
+        context['object'] = MVPanel.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -926,27 +989,27 @@ class TrafoListView(ListView):
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kva_value=float(search_query)))
-                        & Q(merk__icontains=merk_query) & Q(year__icontains=year_query)
+                        & Q(merk__istartswith=merk_query) & Q(year__istartswith=year_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kva_value=float(search_query))) 
-                        & Q(merk__icontains=merk_query) & Q(year__icontains=year_query) 
+                        & Q(merk__istartswith=merk_query) & Q(year__istartswith=year_query) 
                         & Q(kva_value=float(kva_value_query))
                     )
             else:
                 if kva_value_query == '':
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
-                        & Q(year__icontains=year_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
+                        & Q(year__istartswith=year_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
-                        & Q(year__icontains=year_query) & Q(kva_value=float(kva_value_query))
+                        | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
+                        & Q(year__istartswith=year_query) & Q(kva_value=float(kva_value_query))
                     )
             return queryset
         else:
@@ -975,9 +1038,12 @@ class TrafoEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         trafo = form.save(commit=False)
-        trafo.updated_at = timezone.localtime(timezone.now())
-        trafo.updated_by = self.request.user
         trafo.save()
+        history = TrafoHistory(
+            updated_by = self.request.user,
+            object = trafo
+        )
+        history.save()
         return redirect('review_trafo')
 
 
@@ -994,14 +1060,18 @@ class TrafoDelete(DeleteView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
-class TrafoHistory(ListView):
-    model = Trafo
-    context_object_name = 'object'
+class TrafoHistoryView(ListView):
+    model = TrafoHistory
+    context_object_name = 'histories'
     template_name = "history_trafo.html"
 
     def get_queryset(self):
-        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
-        return queryset
+        return self.model.objects.filter(object=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(TrafoHistoryView, self).get_context_data(**kwargs)
+        context['object'] = Trafo.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -1021,14 +1091,14 @@ class AIOListView(ListView):
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kva=float(search_query))
-                        | Q(phase__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        | Q(phase__icontains=search_query)) & Q(merk__istartswith=merk_query)
                         & Q(phase__icontains=phase_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kva=float(search_query))
-                        | Q(phase__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        | Q(phase__icontains=search_query)) & Q(merk__istartswith=merk_query)
                         & Q(phase__icontains=phase_query) & Q(kva_value=float(kva_value_query))
                     )
             else:
@@ -1036,13 +1106,13 @@ class AIOListView(ListView):
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(phase__icontains=search_query)) 
-                        & Q(merk__icontains=merk_query) & Q(phase__icontains=phase_query) 
+                        & Q(merk__istartswith=merk_query) & Q(phase__icontains=phase_query) 
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(phase__icontains=search_query)) 
-                        & Q(merk__icontains=merk_query) & Q(phase__icontains=phase_query)
+                        & Q(merk__istartswith=merk_query) & Q(phase__icontains=phase_query)
                         & Q(kva=float(kva_value_query))
                     )
             return queryset
@@ -1072,13 +1142,16 @@ class AIOEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         aio = form.save(commit=False)
-        aio.updated_at = timezone.localtime(timezone.now())
-        aio.updated_by = self.request.user
         if aio.kurs == '$':
             aio.idr_value = round(cache.get_or_set('kurs_usd', get_idr_conversion_value('$'), 3600) * aio.value, 2)
         else:
             aio.idr_value = round(cache.get_or_set('kurs_eur', get_idr_conversion_value('E'), 3600) * aio.value, 2)
         aio.save()
+        history = AllInOneHistory(
+            updated_by = self.request.user,
+            object = aio
+        )
+        history.save()
         return redirect('review_all_in_one')
 
 
@@ -1095,14 +1168,18 @@ class AIODelete(DeleteView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
-class AIOHistory(ListView):
-    model = AllInOne
-    context_object_name = 'object'
+class AIOHistoryView(ListView):
+    model = AllInOneHistory
+    context_object_name = 'histories'
     template_name = "history_aio.html"
 
     def get_queryset(self):
-        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
-        return queryset
+        return self.model.objects.filter(object=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(AIOHistoryView, self).get_context_data(**kwargs)
+        context['object'] = AllInOne.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 @method_decorator(decorator=login_required, name='dispatch')
@@ -1121,24 +1198,24 @@ class MountingListView(ListView):
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kw_value=float(search_query))) 
-                        & Q(merk__icontains=merk_query)
+                        & Q(merk__istartswith=merk_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kw_value=float(search_query))) 
-                        & Q(merk__icontains=merk_query) & Q(kw_value=float(kw_value_query))
+                        & Q(merk__istartswith=merk_query) & Q(kw_value=float(kw_value_query))
                     )
             else:
                 if kw_value_query == '':
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
                         & Q(kw_value=float(kw_value_query))
                     )
             return queryset
@@ -1167,9 +1244,12 @@ class MountingEdit(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Item Succesfully Edited!')
         mounting = form.save(commit=False)
-        mounting.updated_at = timezone.localtime(timezone.now())
-        mounting.updated_by = self.request.user
         mounting.save()
+        history = MountingHistory(
+            updated_by = self.request.user,
+            object = mounting
+        )
+        history.save()
         return redirect('review_mounting')
 
 
@@ -1186,12 +1266,16 @@ class MountingDelete(DeleteView):
 
 
 @method_decorator(decorator=login_required, name='dispatch')
-class MountingHistory(ListView):
-    model = Mounting
-    context_object_name = 'object'
+class MountingHistoryView(ListView):
+    model = MountingHistory
+    context_object_name = 'histories'
     template_name = "history_mounting.html"
 
     def get_queryset(self):
-        queryset = self.model.objects.get(pk=self.kwargs.get('pk'))
-        return queryset
+        return self.model.objects.filter(object=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(MountingHistoryView, self).get_context_data(**kwargs)
+        context['object'] = Mounting.objects.get(pk=self.kwargs['pk'])
+        return context
 

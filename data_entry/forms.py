@@ -234,7 +234,8 @@ class InverterSearchForm(forms.Form):
     APPLICATION_CHOISES = [
         ('', '-------'),
         ('On', 'On-Grid'),
-        ('Off', 'Off-Grid')
+        ('Off', 'Off-Grid'),
+        ('Hybrid', 'Hybrid')
     ]
 
     merk = forms.ChoiceField(choices=merk_choices, label='Brand')
