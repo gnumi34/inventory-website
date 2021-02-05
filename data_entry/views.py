@@ -235,15 +235,15 @@ class InverterListView(ListView):
                 queryset = self.model.objects.filter(
                     (Q(merk__icontains=search_query) | Q(aplikasi__icontains=search_query)
                     | Q(tipe__icontains=search_query) | Q(jenis__icontains=search_query) |
-                    Q(kva=float(search_query))) & Q(merk__icontains=merk_query) & 
-                    Q(aplikasi__icontains=application_query) & Q(phase__icontains=phase_query)
+                    Q(kva=float(search_query))) & Q(merk__istartswith=merk_query) & 
+                    Q(aplikasi__istartswith=application_query) & Q(phase__istartswith=phase_query)
                 )
             else:
                 queryset = self.model.objects.filter(
                     (Q(merk__icontains=search_query) | Q(aplikasi__icontains=search_query)
                     | Q(tipe__icontains=search_query) | Q(jenis__icontains=search_query)) &
-                    Q(merk__icontains=merk_query) & Q(aplikasi__icontains=application_query)
-                    & Q(phase__icontains=phase_query)
+                    Q(merk__istartswith=merk_query) & Q(aplikasi__istartswith=application_query)
+                    & Q(phase__istartswith=phase_query)
                 )
             return queryset
         else:
@@ -324,7 +324,7 @@ class MonitoringListView(ListView):
         if search_query or merk_query:
             queryset = self.model.objects.filter(
                 (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
             )
             return queryset
         else:
@@ -399,7 +399,7 @@ class WeatherStationListView(ListView):
         if search_query or merk_query:
             queryset = self.model.objects.filter(
                 (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
             )
             return queryset
         else:
@@ -474,7 +474,7 @@ class SensorListView(ListView):
         if search_query or merk_query:
             queryset = self.model.objects.filter(
                 (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
             )
             return queryset
         else:
@@ -549,7 +549,7 @@ class SolarCCListView(ListView):
         if search_query or merk_query:
             queryset = self.model.objects.filter(
                 (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
             )
             return queryset
         else:
@@ -632,24 +632,24 @@ class PVModuleListView(ListView):
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kw_value=float(search_query))) 
-                        & Q(merk__icontains=merk_query) & Q(kw_value=float(kw_value_query))
+                        & Q(merk__istartswith=merk_query) & Q(kw_value=float(kw_value_query))
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kw_value=float(search_query))) 
-                        & Q(merk__icontains=merk_query)
+                        & Q(merk__istartswith=merk_query)
                     )
             else:
                 if kw_value_query == '':
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
                         & Q(kw_value=float(kw_value_query))
                     )
             return queryset
@@ -731,29 +731,29 @@ class BatteryListView(ListView):
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(keterangan__icontains=search_query)
-                        | Q(capacity=float(search_query))) & Q(merk__icontains=merk_query)
-                        & Q(tipe__icontains=tipe_query)
+                        | Q(capacity=float(search_query))) & Q(merk__istartswith=merk_query)
+                        & Q(tipe__istartswith=tipe_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(keterangan__icontains=search_query)
-                        | Q(capacity=float(search_query))) & Q(merk__icontains=merk_query)
-                        & Q(v_per_cell=float(v_per_cell_query)) & Q(tipe__icontains=tipe_query)
+                        | Q(capacity=float(search_query))) & Q(merk__istartswith=merk_query)
+                        & Q(v_per_cell=float(v_per_cell_query)) & Q(tipe__istartswith=tipe_query)
                     )
             else:
                 if v_per_cell_query == '':
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(keterangan__icontains=search_query)) 
-                        & Q(merk__icontains=merk_query) & Q(tipe__icontains=tipe_query)
+                        & Q(merk__istartswith=merk_query) & Q(tipe__istartswith=tipe_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(keterangan__icontains=search_query)) 
-                        & Q(merk__icontains=merk_query) & Q(v_per_cell=float(v_per_cell_query)) 
-                        & Q(tipe__icontains=tipe_query)
+                        & Q(merk__istartswith=merk_query) & Q(v_per_cell=float(v_per_cell_query)) 
+                        & Q(tipe__istartswith=tipe_query)
                     )
             return queryset
         else:
@@ -834,7 +834,7 @@ class LVPanelListView(ListView):
         if search_query or merk_query:
             queryset = self.model.objects.filter(
                 (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
             )
             return queryset
         else:
@@ -909,7 +909,7 @@ class MVPanelListView(ListView):
         if search_query or merk_query:
             queryset = self.model.objects.filter(
                 (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
             )
             return queryset
         else:
@@ -989,27 +989,27 @@ class TrafoListView(ListView):
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kva_value=float(search_query)))
-                        & Q(merk__icontains=merk_query) & Q(year__icontains=year_query)
+                        & Q(merk__istartswith=merk_query) & Q(year__istartswith=year_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kva_value=float(search_query))) 
-                        & Q(merk__icontains=merk_query) & Q(year__icontains=year_query) 
+                        & Q(merk__istartswith=merk_query) & Q(year__istartswith=year_query) 
                         & Q(kva_value=float(kva_value_query))
                     )
             else:
                 if kva_value_query == '':
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
-                        & Q(year__icontains=year_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
+                        & Q(year__istartswith=year_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
-                        & Q(year__icontains=year_query) & Q(kva_value=float(kva_value_query))
+                        | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
+                        & Q(year__istartswith=year_query) & Q(kva_value=float(kva_value_query))
                     )
             return queryset
         else:
@@ -1091,14 +1091,14 @@ class AIOListView(ListView):
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kva=float(search_query))
-                        | Q(phase__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        | Q(phase__icontains=search_query)) & Q(merk__istartswith=merk_query)
                         & Q(phase__icontains=phase_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kva=float(search_query))
-                        | Q(phase__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        | Q(phase__icontains=search_query)) & Q(merk__istartswith=merk_query)
                         & Q(phase__icontains=phase_query) & Q(kva_value=float(kva_value_query))
                     )
             else:
@@ -1106,13 +1106,13 @@ class AIOListView(ListView):
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(phase__icontains=search_query)) 
-                        & Q(merk__icontains=merk_query) & Q(phase__icontains=phase_query) 
+                        & Q(merk__istartswith=merk_query) & Q(phase__icontains=phase_query) 
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(phase__icontains=search_query)) 
-                        & Q(merk__icontains=merk_query) & Q(phase__icontains=phase_query)
+                        & Q(merk__istartswith=merk_query) & Q(phase__icontains=phase_query)
                         & Q(kva=float(kva_value_query))
                     )
             return queryset
@@ -1198,24 +1198,24 @@ class MountingListView(ListView):
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kw_value=float(search_query))) 
-                        & Q(merk__icontains=merk_query)
+                        & Q(merk__istartswith=merk_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
                         | Q(tipe__icontains=search_query) | Q(kw_value=float(search_query))) 
-                        & Q(merk__icontains=merk_query) & Q(kw_value=float(kw_value_query))
+                        & Q(merk__istartswith=merk_query) & Q(kw_value=float(kw_value_query))
                     )
             else:
                 if kw_value_query == '':
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
                     )
                 else:
                     queryset = self.model.objects.filter(
                         (Q(merk__icontains=search_query) | Q(item__icontains=search_query)
-                        | Q(tipe__icontains=search_query)) & Q(merk__icontains=merk_query)
+                        | Q(tipe__icontains=search_query)) & Q(merk__istartswith=merk_query)
                         & Q(kw_value=float(kw_value_query))
                     )
             return queryset
