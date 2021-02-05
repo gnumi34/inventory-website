@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.fields import DateTimeField
+from django.db.models.fields.related import ForeignKey
 
 
 class Inverter(models.Model):
@@ -39,6 +41,12 @@ class Inverter(models.Model):
         return (self.merk + ' ' + self.tipe)
 
 
+class InverterHistory(models.Model):
+    updated_at = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    object = ForeignKey(Inverter, related_name='histories', on_delete=models.CASCADE)
+
+
 class Monitoring(models.Model):
     merk = models.CharField(max_length=30, unique=False)
     item = models.CharField(max_length=100, unique=False)
@@ -53,6 +61,12 @@ class Monitoring(models.Model):
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
+
+
+class MonitoringHistory(models.Model):
+    updated_at = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    object = ForeignKey(Monitoring, related_name='histories', on_delete=models.CASCADE)
 
 
 class WeatherStation(models.Model):
@@ -71,6 +85,12 @@ class WeatherStation(models.Model):
         return (self.merk + ' ' + self.tipe)
 
 
+class WeatherStationHistory(models.Model):
+    updated_at = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    object = ForeignKey(WeatherStation, related_name='histories', on_delete=models.CASCADE)
+
+
 class Sensor(models.Model):
     merk = models.CharField(max_length=30, unique=False)
     item = models.CharField(max_length=100, unique=False)
@@ -85,6 +105,12 @@ class Sensor(models.Model):
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
+
+
+class SensorHistory(models.Model):
+    updated_at = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    object = ForeignKey(Sensor, related_name='histories', on_delete=models.CASCADE)
 
 
 class SolarCC(models.Model):
@@ -113,6 +139,12 @@ class SolarCC(models.Model):
         return (self.merk + ' ' + self.tipe)
 
 
+class SolarCCHistory(models.Model):
+    updated_at = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    object = ForeignKey(SolarCC, related_name='histories', on_delete=models.CASCADE)
+
+
 class PVModule(models.Model):
     KURS_UANG = [
         ('$', 'USD'),
@@ -134,6 +166,12 @@ class PVModule(models.Model):
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
+
+
+class PVModuleHistory(models.Model):
+    updated_at = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    object = ForeignKey(PVModule, related_name='histories', on_delete=models.CASCADE)
 
 
 class Battery(models.Model):
@@ -163,6 +201,12 @@ class Battery(models.Model):
         return (self.merk + ' ' + self.tipe)
 
 
+class BatteryHistory(models.Model):
+    updated_at = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    object = ForeignKey(Battery, related_name='histories', on_delete=models.CASCADE)
+
+
 class LVPanel(models.Model):
     merk = models.CharField(max_length=30, unique=False)
     item = models.CharField(max_length=100, unique=False)
@@ -179,6 +223,12 @@ class LVPanel(models.Model):
         return (self.merk + ' ' + self.tipe)
 
 
+class LVPanelHistory(models.Model):
+    updated_at = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    object = ForeignKey(LVPanel, related_name='histories', on_delete=models.CASCADE)
+
+
 class MVPanel(models.Model):
     merk = models.CharField(max_length=30, unique=False)
     item = models.CharField(max_length=100, unique=False)
@@ -193,6 +243,12 @@ class MVPanel(models.Model):
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
+
+
+class MVPanelHistory(models.Model):
+    updated_at = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    object = ForeignKey(MVPanel, related_name='histories', on_delete=models.CASCADE)
 
 
 class Trafo(models.Model):
@@ -226,6 +282,12 @@ class Trafo(models.Model):
     updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
 
+class TrafoHistory(models.Model):
+    updated_at = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    object = ForeignKey(Trafo, related_name='histories', on_delete=models.CASCADE)
+
+
 class AllInOne(models.Model):
     PHASE_CHOISES = [
         ('Single Phase', "Single Phase"),
@@ -256,6 +318,12 @@ class AllInOne(models.Model):
         return (self.merk + ' ' + self.tipe)
 
 
+class AllInOneHistory(models.Model):
+    updated_at = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    object = ForeignKey(AllInOne, related_name='histories', on_delete=models.CASCADE)
+
+
 class Mounting(models.Model):
     KURS_UANG = [
         ('$', 'USD'),
@@ -277,3 +345,9 @@ class Mounting(models.Model):
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
+
+
+class MountingHistory(models.Model):
+    updated_at = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    object = ForeignKey(Mounting, related_name='histories', on_delete=models.CASCADE)
