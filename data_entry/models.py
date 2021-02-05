@@ -40,6 +40,10 @@ class Inverter(models.Model):
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
 
+    class Meta:
+        ordering = ['merk']
+
+
 
 class InverterHistory(models.Model):
     updated_at = DateTimeField(auto_now_add=True)
@@ -61,6 +65,9 @@ class Monitoring(models.Model):
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
+
+    class Meta:
+        ordering = ['merk']
 
 
 class MonitoringHistory(models.Model):
@@ -84,6 +91,9 @@ class WeatherStation(models.Model):
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
 
+    class Meta:
+        ordering = ['merk']
+
 
 class WeatherStationHistory(models.Model):
     updated_at = DateTimeField(auto_now_add=True)
@@ -105,6 +115,9 @@ class Sensor(models.Model):
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
+
+    class Meta:
+        ordering = ['merk']
 
 
 class SensorHistory(models.Model):
@@ -138,6 +151,9 @@ class SolarCC(models.Model):
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
 
+    class Meta:
+        ordering = ['merk']
+
 
 class SolarCCHistory(models.Model):
     updated_at = DateTimeField(auto_now_add=True)
@@ -166,6 +182,9 @@ class PVModule(models.Model):
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
+
+    class Meta:
+        ordering = ['merk']
 
 
 class PVModuleHistory(models.Model):
@@ -200,6 +219,9 @@ class Battery(models.Model):
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
 
+    class Meta:
+        ordering = ['merk']
+
 
 class BatteryHistory(models.Model):
     updated_at = DateTimeField(auto_now_add=True)
@@ -222,6 +244,9 @@ class LVPanel(models.Model):
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
 
+    class Meta:
+        ordering = ['merk']
+
 
 class LVPanelHistory(models.Model):
     updated_at = DateTimeField(auto_now_add=True)
@@ -243,6 +268,9 @@ class MVPanel(models.Model):
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
+
+    class Meta:
+        ordering = ['merk']
 
 
 class MVPanelHistory(models.Model):
@@ -281,6 +309,12 @@ class Trafo(models.Model):
     updated_at = models.DateTimeField(null=True)
     updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        return (self.merk + ' ' + self.tipe)
+
+    class Meta:
+        ordering = ['merk']
+
 
 class TrafoHistory(models.Model):
     updated_at = DateTimeField(auto_now_add=True)
@@ -317,6 +351,9 @@ class AllInOne(models.Model):
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
 
+    class Meta:
+        ordering = ['merk']
+
 
 class AllInOneHistory(models.Model):
     updated_at = DateTimeField(auto_now_add=True)
@@ -345,6 +382,9 @@ class Mounting(models.Model):
 
     def __str__(self) -> str:
         return (self.merk + ' ' + self.tipe)
+
+    class Meta:
+        ordering = ['merk']
 
 
 class MountingHistory(models.Model):
