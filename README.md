@@ -6,10 +6,8 @@ Currently supports items entry based on category only.
 
 Planned features:
 
-1. Update search form choices every item entry.
-2. Sort view based on columns.
-3. Stricter user authentication and permissions.
-4. Add email backend for password reset feature.
+1. Sort view based on columns.
+2. Add email backend for password reset feature.
 
 ## Requirements
 
@@ -62,7 +60,13 @@ Planned features:
 
     `python3 manage.py migrate`
 
-8. Run the apps:
+8. For first time user, run this command to create superuser:
+
+   `python3 manage.py createsuperuser`
+
+   You can add standard user using Django Admin Site on `http://localhost:8000/admin/`
+
+9. Run the apps:
 
    `python3 manage.py runserver`
 
