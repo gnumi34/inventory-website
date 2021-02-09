@@ -17,8 +17,8 @@ class Inverter(models.Model):
     ]
 
     KURS_UANG = [
-        ('$', 'USD'),
-        ('Euro', 'Euro'),
+        ('$', 'US$'),
+        ('Euro', '€'),
     ]
 
     merk = models.CharField(max_length=30, unique=False)
@@ -128,8 +128,8 @@ class SensorHistory(models.Model):
 
 class SolarCC(models.Model):
     KURS_UANG = [
-        ('$', 'USD'),
-        ('Euro', 'Euro'),
+        ('$', 'US$'),
+        ('Euro', '€'),
     ]
 
     merk = models.CharField(max_length=30, unique=False)
@@ -163,8 +163,8 @@ class SolarCCHistory(models.Model):
 
 class PVModule(models.Model):
     KURS_UANG = [
-        ('$', 'USD'),
-        ('E', 'Euro'),
+        ('$', 'US$'),
+        ('E', '€'),
     ]
 
     merk = models.CharField(max_length=30, unique=False)
@@ -195,8 +195,8 @@ class PVModuleHistory(models.Model):
 
 class Battery(models.Model):
     KURS_UANG = [
-        ('$', 'USD'),
-        ('Euro', 'Euro'),
+        ('$', 'US$'),
+        ('Euro', '€'),
     ]
 
     merk = models.CharField(max_length=30, unique=False)
@@ -329,8 +329,8 @@ class AllInOne(models.Model):
     ]
 
     KURS_UANG = [
-        ('$', 'USD'),
-        ('Euro', 'Euro'),
+        ('$', 'US$'),
+        ('Euro', '€'),
     ]
 
     merk = models.CharField(max_length=30, unique=False)
@@ -363,8 +363,8 @@ class AllInOneHistory(models.Model):
 
 class Mounting(models.Model):
     KURS_UANG = [
-        ('$', 'USD'),
-        ('E', 'Euro'),
+        ('$', 'US$'),
+        ('E', '€'),
     ]
 
     merk = models.CharField(max_length=30, unique=False)

@@ -22,7 +22,7 @@
     <td>{{ object.item }}</td>
     <td>{{ object.tipe }}</td>
     <td>{{ object.kw_value }} Wp</td>
-    <td>{% if object.kurs == '$' %}US$ {% else %}EUR {% endif %}{{ object.wp_price }},-</td>
+    <td>{% if object.kurs == '$' %}US$ {% else %}€ {% endif %}{{ object.wp_price }},-</td>
     <td>{{ object.contact }}</td>
     <td>{{ object.period }}</td>
 {% endblock  %}
