@@ -222,6 +222,7 @@ def input_mounting(request):
 @method_decorator(decorator=login_required, name='dispatch')
 class InverterListView(ListView):
     model = Inverter
+    paginate_by = 15
     context_object_name = 'objects'
     template_name = "review_inverter.html"
 
@@ -315,6 +316,7 @@ class InverterHistoryView(ListView):
 @method_decorator(decorator=login_required, name='dispatch')
 class MonitoringListView(ListView):
     model = Monitoring
+    paginate_by = 15
     context_object_name = 'objects'
     template_name = "review_monitoring.html"
 
@@ -390,6 +392,7 @@ class MonitoringHistoryView(ListView):
 @method_decorator(decorator=login_required, name='dispatch')
 class WeatherStationListView(ListView):
     model = WeatherStation
+    paginate_by = 15
     context_object_name = 'objects'
     template_name = "review_weather.html"
 
@@ -465,6 +468,7 @@ class WeatherStationHistoryView(ListView):
 @method_decorator(decorator=login_required, name='dispatch')
 class SensorListView(ListView):
     model = Sensor
+    paginate_by = 15
     context_object_name = 'objects'
     template_name = "review_sensor.html"
 
@@ -540,6 +544,7 @@ class SensorHistoryView(ListView):
 @method_decorator(decorator=login_required, name='dispatch')
 class SolarCCListView(ListView):
     model = SolarCC
+    paginate_by = 15
     context_object_name = 'objects'
     template_name = "review_solarcc.html"
 
@@ -619,6 +624,7 @@ class SolarCCHistoryView(ListView):
 @method_decorator(decorator=login_required, name='dispatch')
 class PVModuleListView(ListView):
     model = PVModule
+    paginate_by = 15
     context_object_name = 'objects'
     template_name = "review_pv_module.html"
 
@@ -717,6 +723,7 @@ class PVModuleHistoryView(ListView):
 @method_decorator(decorator=login_required, name='dispatch')
 class BatteryListView(ListView):
     model = Battery
+    paginate_by = 15
     context_object_name = 'objects'
     template_name = "review_battery.html"
 
@@ -825,6 +832,7 @@ class BatteryHistoryView(ListView):
 @method_decorator(decorator=login_required, name='dispatch')
 class LVPanelListView(ListView):
     model = LVPanel
+    paginate_by = 15
     context_object_name = 'objects'
     template_name = "review_lv_panel.html"
 
@@ -900,6 +908,7 @@ class LVPanelHistoryView(ListView):
 @method_decorator(decorator=login_required, name='dispatch')
 class MVPanelListView(ListView):
     model = MVPanel
+    paginate_by = 15
     context_object_name = 'objects'
     template_name = "review_mv_panel.html"
 
@@ -975,6 +984,7 @@ class MVPanelHistoryView(ListView):
 @method_decorator(decorator=login_required, name='dispatch')
 class TrafoListView(ListView):
     model = Trafo
+    paginate_by = 15
     context_object_name = 'objects'
     template_name = "review_trafo.html"
 
@@ -1077,6 +1087,7 @@ class TrafoHistoryView(ListView):
 @method_decorator(decorator=login_required, name='dispatch')
 class AIOListView(ListView):
     model = AllInOne
+    paginate_by = 15
     context_object_name = 'objects'
     template_name = "review_aio.html"
 
@@ -1185,6 +1196,7 @@ class AIOHistoryView(ListView):
 @method_decorator(decorator=login_required, name='dispatch')
 class MountingListView(ListView):
     model = Mounting
+    paginate_by = 15
     context_object_name = 'objects'
     template_name = "review_mounting.html"
 

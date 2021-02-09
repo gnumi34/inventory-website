@@ -43,3 +43,7 @@
 .fieldWrapper {
     padding: 10px;
 }
+
+.pagination {
+    justify-content: center;
+}
